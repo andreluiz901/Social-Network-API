@@ -1,5 +1,5 @@
 const express = require('express');
-const crypto = require('crypto')
+const {generateId} = require('./utils/generate_id');
 const server = express();
 server.use(express.urlencoded({extended:true}))
 server.use(express.json()); // faz com que o express entenda JSON
@@ -14,7 +14,7 @@ server.get('/users', (req, res) => {
 
 
 server.post('/users', (req, res) => {
-  const id = crypto.randomBytes(16).toString("hex");
+  const id = generateId();
 
   if(!req.body.name){
     res.json({error:"Favor preencher o campo nome"})
