@@ -1,26 +1,21 @@
 const express = require('express');
 const {generateId} = require('./utils/generate_id');
+const {validateName} = require('./utils/validate_name');
 const server = express();
 server.use(express.urlencoded({extended:true}))
 server.use(express.json()); // faz com que o express entenda JSON
 const port = 3000
 
-let users = []
-  
+let users = [];
+
 // CRUD - Create, Read, Update, Delete
-server.get('/users', (req, res) => {
-  return res.send({data:'aqui é uma qualquer coisa'})
-  //return res.send({data:users}) 
-}) // rota para listar todos os users
+server.get('/users/', (req, res) => {
+  res.send({data:users}) 
+});
 
-
-server.post('/users', (req, res) => {
+server.post('/users', validateName, (req, res) => {  
+  
   const id = generateId();
-
-  if(!req.body.name){
-    res.json({error:"Favor preencher o campo nome"})
-    return
-  }
 
   const novoUsuario = {
     id,
