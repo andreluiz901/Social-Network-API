@@ -9,7 +9,8 @@ let users = []
   
 // CRUD - Create, Read, Update, Delete
 server.get('/users', (req, res) => {
-  return res.send({data:users}) //json(users);
+  return res.send({data:'aqui é uma qualquer coisa'})
+  //return res.send({data:users}) 
 }) // rota para listar todos os users
 
 
