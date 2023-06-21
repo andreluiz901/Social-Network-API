@@ -2,9 +2,7 @@ const express = require('express');
 const { generateId } = require('../utils/generate_id');
 const {validateName} = require('../utils/validate_name');
 const userRouter = express.Router();
-
-
-let users = [];
+const { users } = require('./database');
 
 userRouter.get('/:id?', (req, res) => {
     res.send({ data: users });
