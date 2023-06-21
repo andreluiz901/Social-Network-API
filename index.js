@@ -10,7 +10,8 @@ server.use(bodyParser.json());
 const port = 3000
 
 server.use('/users', userRouter);
-server.use('/users', loginRouter);
-server.use('/user', newUserRouter)
+server.use('/login', loginRouter);
+server.use('/newUser', newUserRouter);
 
-server.listen(port);
+server.listen(port, () =>
+console.log('Server rodando na porta', port));

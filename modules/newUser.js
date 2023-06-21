@@ -1,22 +1,39 @@
 const express = require('express');
-const {validateNewUser} = require('../utils/validate_newUser');
-const bodyParser = require('body-parser');
-const server = express();
-server.use(bodyParser.json());
 const newUserRouter = express.Router();
+const server = express();
+const bodyParser = require('body-parser');
+const {
+    encryptPassword,
+    addUser,
+    findUserByEmail,
+    findUserByUsername} = require('../utils/validate_newUser');
+const {users} = require('../modules/database')
+server.use(bodyParser.json());
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-const { users } = require('./database');
 
-newUserRouter.post('/newUser', (req,res) => {
-    server.use(bodyParser.json());
-    //LÓGICA
-    //Pegar os dados com req.body
-    //Validar os dados recebidos
-    //Autenticação ok, cadastra no DB e retorna Sucesso
-    //Autenticação não-ok, retorna erro
-    users.push(newUser);
-    res.json({ status: 'User created successfully!' })
+newUserRouter.post('/', (req,res) => {
+
+    const { username, email, password } = req.body;
+    console.log(username, email, password)
+    console.log('data: ', users)
+    
+    const existingUser = findUserByUsername(username);
+    if (existingUser) {
+        return res.status(400).json({ message: 'Nome de Usuário existente'});
+    }
+
+    const existingEmail = findUserByEmail(email);
+    if (existingEmail) {
+        return res.status(400).json({ message: 'email ja existente'});
+    }
+
+    const hashedPassword = encryptPassword(password);
+
+    addUser (username, email, hashedPassword);
+
+    res.status(200).json({ message: 'Usuario cadastrado com sucesso'});
+
 });
 
 module.exports = newUserRouter;
