@@ -4,9 +4,7 @@ const userRouter = require('./modules/userRouter');
 const loginRouter = require('./modules/login');
 const newUserRouter = require('./modules/newUser')
 server.use(express.urlencoded({extended:true}))
-server.use(express.json()); // faz com que o express entenda JSON
-const bodyParser = require('body-parser');
-server.use(bodyParser.json());
+server.use(express.json());
 const port = 3000
 
 server.use('/users', userRouter);

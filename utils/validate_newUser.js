@@ -1,21 +1,20 @@
 const express = require('express');
 const server = express();
-const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const {generateId} = require('../utils/generate_id');
 const { users } = require('../modules/database')
-server.use(bodyParser.json());
-
+const { hashSteps } = require('./utilities')
 
 function encryptPassword (password) {
-    return bcrypt.hashSync(password, 10)
+    return bcrypt.hashSync(password, hashSteps)
 }
-function addUser (username, email, password) {
+function addUser (user) {
     //const hashedPassword = encryptPassword(password);
+    const id = generateId();
+
     const newUser = {
-        username, 
-        email, 
-        password};
+        id,
+        ...user};
     users.push(newUser);
 };
 
