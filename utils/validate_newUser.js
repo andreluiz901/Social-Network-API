@@ -28,3 +28,17 @@ function findUserByEmail(email) {
 
 
 module.exports = { encryptPassword, addUser, findUserByEmail, findUserByUsername};
+
+
+
+/* const {
+    encryptPassword,
+    addUser,
+    findUserByEmail} = require('../../utils/validate_newUser');
+const {
+    validateUsername,
+    validateEmail,
+    validatePassword,
+    validateName
+    } = require('../../utils/validate_user');
+    */
