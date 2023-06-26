@@ -1,11 +1,10 @@
 const express = require('express');
 const userRouter = express.Router();
-const {validateName} = require('../../utils/validate_user');
 const { gettAllUsers, 
         createNewUser,
         updateUser,
-        deleteUser 
-        } = require('./service.user');
+        deleteUser,
+        validateName} = require('./service.user');
 
 userRouter.get('/', (req, res) => {
     res.send({ data: gettAllUsers() });

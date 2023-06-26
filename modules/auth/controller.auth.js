@@ -15,15 +15,14 @@ const {findUserByUsername,
         findUserByEmail} = require('./service.auth')
 
 
-router.post('/', validateUsername, validatePassword, (req,res) => {
+router.post('/', (req,res) => {
     const { username, password } = req.body;
-
+    //const username = req.body.username.trim();
+    //const username = req.body.username.replace(/ /g, "")
     const foundUser = findUserByUsername(username);
-    console.log(foundUser);
-    const comparePwd = passwordCompare(foundUser, password, res);
     
     if (foundUser) {
-        return comparePwd
+        return passwordCompare(foundUser, password, req, res)
     } else {
         res.status(401).json({ message: "Credenciais Inválidas"})
     }

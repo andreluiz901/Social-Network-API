@@ -1,20 +1,33 @@
 const { users:userRepository } = require('../database')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { hashSteps } = require('../../utils/utilities')
+const { generateId } = require('../../utils/generate_id')
+const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-=_+{}[\]|;:",.<>/?]).{6,20}$/;
+
+function isNotEmpty (req) {
+    if (req.body.name || req.body.username || req.body.password || req.body.email) {
+        return true
+    } else { 
+        return false
+    }
+    next()
+}
 
 function findUserByUsername(username) {
-    if (username != undefined) {
-        return userRepository.find((user) => user.username === username);
+    if (username !== undefined){
+    return userRepository.find((user) => user.username === username);
     } else {
         return username = false
     }
 };
 
-function passwordCompare (user, password,  res) {
+function passwordCompare (user, password, req, res) {
     bcrypt.compare(password, user.password, (err, result) => {
         if (result) {
             return res.status(200).json({ message: "Login bem-sucedido"});
         } else {
-            res.status(401).json({ message: "Credenciais Inválidas"});
+            return res.status(401).json({ message: "Credenciais Inválidas"});
         }
     })
 
@@ -33,9 +46,13 @@ function validateName (req, res, next) {
 
 function validateUsername (req, res, next) {
     if(!req.body.username){
-        res.status(400).json({error:"Favor preencher o campo Username"})
-        return
-    } else if (req.body.username.length < 4 ) {
+        return res.status(400).json({error:"Favor preencher o campo Username"})
+    };
+    console.log((req.body.username.split(" ")));
+    if((req.body.username.split(" ")).length > 1 ) {
+        return res.status(400).json({error:"Não é permitido preencher o campo Username com espaços"})
+    };
+    if (req.body.username.length < 4 ) {
         res.status(400).json({error:"Favor preencher o campo username com pelo menos 4 caracteres"})
         return
     }
@@ -69,6 +86,7 @@ function validatePassword (req, res, next) {
 function encryptPassword (password) {
     return bcrypt.hashSync(password, hashSteps)
 }
+
 function addUser (user) {
     //const hashedPassword = encryptPassword(password);
     const id = generateId();
@@ -76,15 +94,15 @@ function addUser (user) {
     const newUser = {
         id,
         ...user};
-    users.push(newUser);
+    userRepository.push(newUser);
 };
 
 function findUserByUsername(username) {
-    return users.find((user) => user.username === username);
+    return userRepository.find((user) => user.username === username);
 };
 
 function findUserByEmail(email) {
-    return users.find((user) => user.email === email);
+    return userRepository.find((user) => user.email === email);
 };
 
 
@@ -97,4 +115,5 @@ module.exports = {findUserByUsername,
                 validatePassword,
                 validateName,
                 addUser,
-                encryptPassword}
+                encryptPassword,
+                isNotEmpty}

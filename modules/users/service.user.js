@@ -49,4 +49,20 @@ function deleteUser (id) {
     return true
 }
 
-module.exports = {gettAllUsers, createNewUser, updateUser, findIndexUserById, deleteUser}
+function validateName (req, res, next) {
+    if(!req.body.name){
+        res.status(400).json({error:"Favor preencher o campo nome"})
+        return
+    } else if (req.body.name.length < 4 ) {
+        res.status(400).json({error:"Favor preencher o campo nome com pelo menos 4 caracteres"})
+        return
+    }
+    next()
+}
+
+module.exports = {gettAllUsers, 
+                createNewUser, 
+                updateUser, 
+                findIndexUserById, 
+                deleteUser, 
+                validateName}
