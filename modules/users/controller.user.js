@@ -6,13 +6,14 @@ const { gettAllUsers,
         deleteUser,
         validateName} = require('./service.user');
 
-userRouter.get('/', (req, res) => {
-    res.send({ data: gettAllUsers() });
+userRouter.get('/', async (req, res) => {
+    const responseAllUsers = await gettAllUsers()
+    res.send({ data: responseAllUsers });
 });
   
-userRouter.post('/', validateName, (req, res) => {
-    const newInstanceUser = createNewUser(req.body);
-    res.json(newInstanceUser);
+userRouter.post('/', validateName, async (req, res) => {
+    const newInstanceUser = await createNewUser(req.body);
+    res.status(201).json({ data:newInstanceUser, message: "Usuário criado com sucesso!"})
 });
   
 userRouter.put('/:id?', (req, res) => {

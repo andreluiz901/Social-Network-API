@@ -1,6 +1,19 @@
-//const { mailRegex, passwordFormat } = require('./utilities')
+
+const bcrypt = require('bcrypt');
 const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-=_+{}[\]|;:",.<>/?]).{6,20}$/;
+const {compareCryptString} = require('../../utils/cryptstring')
+ 
+
+function isNotEmpty (req) {
+    if (req.body.name || req.body.username || req.body.password || req.body.email) {
+        return true
+    } else { 
+        return false
+    }
+    next()
+}
+
 
 function validateName (req, res, next) {
     if(!req.body.name){
@@ -15,9 +28,14 @@ function validateName (req, res, next) {
 
 function validateUsername (req, res, next) {
     if(!req.body.username){
-        res.status(400).json({error:"Favor preencher o campo Username"})
-        return
-    } else if (req.body.username.length < 4 ) {
+        return res.status(400).json({error:"Favor preencher o campo Username"})
+    };
+    
+    if((req.body.username.split(" ")).length > 1 ) {
+        return res.status(400).json({error:"Não é permitido preencher o campo Username com espaços"})
+    };
+    
+    if (req.body.username.length < 4 ) {
         res.status(400).json({error:"Favor preencher o campo username com pelo menos 4 caracteres"})
         return
     }
@@ -48,6 +66,9 @@ function validatePassword (req, res, next) {
     next()
 }
 
-
-
-module.exports = {validateName, validateEmail, validateUsername, validatePassword}
+module.exports = { 
+    validateUsername,
+    validateEmail,
+    validatePassword,
+    validateName,  
+    isNotEmpty}

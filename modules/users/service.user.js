@@ -1,25 +1,23 @@
-const { users:userRepository } = require('../database')
+const userRepository = require('./repository.user')
 const {generateId} = require('../../utils/generate_id')
 
 function gettAllUsers() {
-    return userRepository
+    return userRepository.findAllUsers()
 }
 
-function createNewUser({ name, username, email, password }) {
-    const id = generateId();
-
-    const newInstanceUser = {
-        id,
-        name, 
-        username, 
-        email, 
-        password
-    }
-
-    userRepository.push(newInstanceUser)
+function createNewUser({ name, username, password, email }) {
     
-    return newInstanceUser
+        
+    return userRepository.create({name, username, password, email})
 }
+ 
+function findUserByUsername(username) {
+    return userRepository.find((user) => user.username === username) || false;
+};
+
+function findUserByEmail(email) {
+    return userRepository.find((user) => user.email === email);
+};
 
 function findIndexUserById(id) {
     return userRepository.findIndex((user) => user.id === id)
@@ -60,7 +58,10 @@ function validateName (req, res, next) {
     next()
 }
 
-module.exports = {gettAllUsers, 
+module.exports = {
+            findUserByUsername,
+                findUserByEmail, 
+                gettAllUsers, 
                 createNewUser, 
                 updateUser, 
                 findIndexUserById, 

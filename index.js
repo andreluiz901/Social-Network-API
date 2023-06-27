@@ -8,7 +8,7 @@ server.use(express.json());
 const port = 3000
 
 server.use('/users', userController);
-server.use('/login', loginController);
+server.use('/auth', loginController);
 server.use('/newUser', newUserController);
 
 server.listen(port, () =>

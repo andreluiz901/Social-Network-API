@@ -1,55 +1,40 @@
 const express = require('express');
-const server = express();
 const router = express.Router();
-const bcrypt = require('bcrypt');
-server.use(express.urlencoded({ extended: true }));
-server.use(express.json());
-const {findUserByUsername,
-        passwordCompare,
-        validateUsername,
-        validateEmail,
-        validatePassword,
-        validateName,
-        encryptPassword,
-        addUser,
-        findUserByEmail} = require('./service.auth')
+const {signUp,
+        signIn} = require('./service.auth')
+ const {findUserByUsername,
+            passwordCompare,
+            validateUsername,
+            validateEmail,
+            validatePassword,
+            validateName,
+            encryptPassword, 
+            findUserByEmail} = require('./middleware.auth')
 
 
-router.post('/', (req,res) => {
+router.post('/signIn', async (req,res) => {
     const { username, password } = req.body;
-    //const username = req.body.username.trim();
-    //const username = req.body.username.replace(/ /g, "")
-    const foundUser = findUserByUsername(username);
-    
-    if (foundUser) {
-        return passwordCompare(foundUser, password, req, res)
-    } else {
-        res.status(401).json({ message: "Credenciais Inválidas"})
+    const isSigInSuccefully = await signIn({username, password})
+ 
+    if(isSigInSuccefully){
+        res.status(200).json({ message: "SignIn realizado com sucesso!"})
+        return 
     }
-    
+    res.status(401).json({ message: "Credenciais Inválidas"})
 })
 
 
-router.post('/new', validateUsername, validateEmail, validatePassword, validateName, (req,res) => {
+router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, (req,res) => {
 
     const { name, username, email, password } = req.body;
 
-    const existingUser = findUserByUsername(username);
-    if (existingUser) {
-        return res.status(400).json({ message: 'Nome de Usuário existente'});
+    const responseSignUp = signUp({ name, username, email, password })
+ 
+    if (responseSignUp) {
+        return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
     }
-
-    const existingEmail = findUserByEmail(email);
-    if (existingEmail) {
-        return res.status(400).json({ message: 'email ja existente'});
-    }
-
-    const hashedPassword = encryptPassword(password);
-
-    addUser({name, username, email, password:hashedPassword});
-
-    res.status(200).json({ message: 'Usuario cadastrado com sucesso'});
-
+ 
+    res.status(400).json({ message: 'Usuário existente'}) 
 });
 
 module.exports = router;
