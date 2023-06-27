@@ -5,10 +5,16 @@ const { gettAllUsers,
         updateUser,
         deleteUser,
         validateName} = require('./service.user');
+const { update, findUserById } = require('./repository.user');
 
 userRouter.get('/', async (req, res) => {
     const responseAllUsers = await gettAllUsers()
     res.send({ data: responseAllUsers });
+});
+
+userRouter.get('/:id', async (req,res) => {
+    const responseUserById = await findUserById(req.params.id)
+    res.send({ data: responseUserById });
 });
   
 userRouter.post('/', validateName, async (req, res) => {
@@ -16,20 +22,15 @@ userRouter.post('/', validateName, async (req, res) => {
     res.status(201).json({ data:newInstanceUser, message: "Usuário criado com sucesso!"})
 });
   
-userRouter.put('/:id?', (req, res) => {
+userRouter.put('/:id?', async (req, res) => {
     const idUserUpdate = req.params.id
-    const userUpdate = req.body
-    const userUpdated = updateUser(idUserUpdate, userUpdate)
-    res.json(userUpdated)
+    const userUpdated = await updateUser(idUserUpdate, req.body)
+    res.status(201).json({data:userUpdated, message: "Usuário editado com sucesso!"})
 });
   
 userRouter.delete('/:id?', (req, res) => {
-    // Restante do código do DELETE
-    const idUserDelete = req.params.id
-
-    const isUserDeleted = deleteUser(idUserDelete)
-
-    res.json({success:isUserDeleted})
+    const UserDeleted = deleteUser(req.params.id)
+    res.json({success:UserDeleted})
 });
   
 

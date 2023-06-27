@@ -1,13 +1,10 @@
 const userRepository = require('./repository.user')
-const {generateId} = require('../../utils/generate_id')
 
 function gettAllUsers() {
     return userRepository.findAllUsers()
 }
 
-function createNewUser({ name, username, password, email }) {
-    
-        
+function createNewUser({ name, username, password, email }) {        
     return userRepository.create({name, username, password, email})
 }
  
@@ -22,29 +19,15 @@ function findUserByEmail(email) {
 function findIndexUserById(id) {
     return userRepository.findIndex((user) => user.id === id)
 }
-function updateUser (id, {name, username, email, password}) {
-    const userIndexFound = findIndexUserById(id)
 
-    const userFound = userRepository[userIndexFound]
-
-    const userUpdated = {
-        ...userFound,
-        name,  
-        username, 
-        email, 
-        password}
-
-    userRepository[userIndexFound] = userUpdated
-
-    return userUpdated
+function updateUser (id, {name, username, email}) {
+    return userRepository.update({id, name, username, email})
 }
 
+
+
 function deleteUser (id) {
-    const userIndexFound = findIndexUserById(id)
-
-    userRepository.splice(userIndexFound,1)
-
-    return true
+    return userRepository.remove({id})
 }
 
 function validateName (req, res, next) {
