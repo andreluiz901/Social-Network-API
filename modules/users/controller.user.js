@@ -5,7 +5,7 @@ const { gettAllUsers,
         updateUser,
         deleteUser,
         validateName} = require('./service.user');
-const { update, findUserById } = require('./repository.user');
+const { findUserById } = require('./repository.user');
 
 userRouter.get('/', async (req, res) => {
     const responseAllUsers = await gettAllUsers()

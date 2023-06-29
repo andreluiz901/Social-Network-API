@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {signUp,
         signIn} = require('./service.auth')
- const {findUserByUsername,
-            passwordCompare,
-            validateUsername,
+ const {    validateUsername,
             validateEmail,
             validatePassword,
-            validateName,
-            encryptPassword, 
-            findUserByEmail} = require('./middleware.auth')
+            validateName} = require('./middleware.auth')
 
 
 router.post('/signIn', async (req,res) => {

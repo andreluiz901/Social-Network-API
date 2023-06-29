@@ -21,10 +21,9 @@ function findIndexUserById(id) {
 }
 
 function updateUser (id, {name, username, email}) {
+    // só pode editar se o ID existir, senão ele vai criar um novo
     return userRepository.update({id, name, username, email})
 }
-
-
 
 function deleteUser (id) {
     return userRepository.remove({id})

@@ -1,11 +1,24 @@
 const { createConnectionDatabase, disconnectDatabase } = require("../../config/database")
 
+async function findUserByUsername(username) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query('SELECT * FROM public.users WHERE username=$1', [username])
+    await disconnectDatabase(clientDatabase)
+    return responseQuery.rows
+}
+
+async function findUserByEmail(email) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query('SELECT * FROM public.users WHERE email=$1', [email])
+    await disconnectDatabase(clientDatabase)
+    return {email:responseQuery.rows[0].email}
+}
+
 async function findUserById(id) {
     const clientDatabase = await createConnectionDatabase()
-    const userFoundedById = await clientDatabase.query('SELECT * FROM public.users WHERE id=$1', [id]) 
+    const userFoundedById = await clientDatabase.query('SELECT * FROM public.users WHERE id=$1', [id])
+    await disconnectDatabase(clientDatabase) 
     return userFoundedById.rows
-    //retorna tudo do usuario pelo Id
-    //SQL tem que ter comando SELECT co WHERE (pesquisar sobre)
 }
 
 async function findAllUsers() {
@@ -41,4 +54,4 @@ async function remove({id}) {
     return responseQuery 
 }
 
-module.exports = {findUserById, findAllUsers, create, update, remove};
+module.exports = {findUserByUsername, findUserByEmail, findUserById, findAllUsers, create, update, remove};

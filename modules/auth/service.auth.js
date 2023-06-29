@@ -1,8 +1,6 @@
-const bcrypt = require('bcrypt');
-const { users:userRepository } = require('../database')
-const {createNewUser,findUserByUsername , findUserByEmail} = require('../users/service.user'); 
-const {encryptString,compareCryptString} = require('../../utils/cryptstring')
- 
+const {createNewUser} = require('../users/service.user'); 
+const {encryptString,compareCryptString} = require('../../utils/cryptstring');
+const {findUserByUsername, findUserByEmail} = require('../users/repository.user')
 
 function encryptPassword (password) {
     return encryptString(password)
@@ -10,11 +8,12 @@ function encryptPassword (password) {
  
 
 async function signIn({username, password}){
-
-    const foundUser = findUserByUsername(username);
+    console.log(username)
+    const foundUser = await findUserByUsername(username);
+    console.log(foundUser)
  
-    if (foundUser) {
-      const isSigInSuccefully =  await  compareCryptString(password, foundUser.password) 
+    if (foundUser.length > 0) {
+      const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
 
       return isSigInSuccefully;
    
@@ -22,6 +21,7 @@ async function signIn({username, password}){
     
     return null
 }
+
 
 function signUp({name, username, email, password}) {
 
