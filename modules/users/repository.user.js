@@ -11,7 +11,7 @@ async function findUserByEmail(email) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query('SELECT * FROM public.users WHERE email=$1', [email])
     await disconnectDatabase(clientDatabase)
-    return {email:responseQuery.rows[0].email}
+    return responseQuery.rows
 }
 
 async function findUserById(id) {

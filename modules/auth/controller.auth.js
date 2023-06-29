@@ -25,12 +25,13 @@ router.post('/signUp', validateUsername, validateEmail, validatePassword, valida
     const { name, username, email, password } = req.body;
 
     const responseSignUp = signUp({ name, username, email, password })
+    console.log(responseSignUp)
  
     if (responseSignUp) {
         return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
     }
  
-    res.status(400).json({ message: 'Usuário existente'}) 
+    res.status(400).json({ message: 'Não foi possível cadastrar o usuário, favor verifique se as informações estão corretas'}) 
 });
 
 module.exports = router;

@@ -26,12 +26,14 @@ async function signIn({username, password}){
 function signUp({name, username, email, password}) {
 
     const existingUser = findUserByUsername(username);
-    if (existingUser) {
+    if (existingUser.length > 0) {
+        console.log('user')
         return null
     }
 
     const existingEmail = findUserByEmail(email);
-    if (existingEmail) {
+    if (existingEmail.length > 0) {
+        console.log('email')
         return null
     }
 

@@ -1,3 +1,3 @@
-const hashSteps = '10';
+const hashSteps = 10;
 
 module.exports = {hashSteps}
