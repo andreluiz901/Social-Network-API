@@ -8,9 +8,8 @@ function encryptPassword (password) {
  
 
 async function signIn({username, password}){
-    console.log(username)
+    
     const foundUser = await findUserByUsername(username);
-    console.log(foundUser)
  
     if (foundUser.length > 0) {
       const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
@@ -27,13 +26,11 @@ function signUp({name, username, email, password}) {
 
     const existingUser = findUserByUsername(username);
     if (existingUser.length > 0) {
-        console.log('user')
         return null
     }
 
     const existingEmail = findUserByEmail(email);
     if (existingEmail.length > 0) {
-        console.log('email')
         return null
     }
 

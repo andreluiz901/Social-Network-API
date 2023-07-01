@@ -23,9 +23,13 @@ userRouter.post('/', validateName, async (req, res) => {
 });
   
 userRouter.put('/:id?', async (req, res) => {
-    const idUserUpdate = req.params.id
-    const userUpdated = await updateUser(idUserUpdate, req.body)
-    res.status(201).json({data:userUpdated, message: "Usuário editado com sucesso!"})
+    try {
+        const idUserUpdate = req.params.id
+        const userUpdated = await updateUser(idUserUpdate, req.body)
+        res.status(201).json({data:userUpdated, message: "Usuário editado com sucesso!"})
+    } catch (error) {  
+        res.status(500).json({  message: "Ocorreu um problema de servidor!"})
+    } 
 });
   
 userRouter.delete('/:id?', (req, res) => {

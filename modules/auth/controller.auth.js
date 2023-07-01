@@ -25,7 +25,7 @@ router.post('/signUp', validateUsername, validateEmail, validatePassword, valida
     const { name, username, email, password } = req.body;
 
     const responseSignUp = signUp({ name, username, email, password })
-    console.log(responseSignUp)
+
  
     if (responseSignUp) {
         return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;

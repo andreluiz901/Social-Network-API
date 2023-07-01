@@ -20,9 +20,24 @@ function findIndexUserById(id) {
     return userRepository.findIndex((user) => user.id === id)
 }
 
-function updateUser (id, {name, username, email}) {
-    // só pode editar se o ID existir, senão ele vai criar um novo
-    return userRepository.update({id, name, username, email})
+async function updateUser (id, {name, username, email}) {
+   
+    const userUpdate = {name, username, email}
+    const userToUpdate = await userRepository.findUserById(id)
+    const userUpdated = Object.keys(userToUpdate).reduce(function(acc, userItem){
+        if (userUpdate[userItem]){
+            return {...acc, [userItem]:userUpdate[userItem]}
+        }
+
+        return {...acc, [userItem]:userToUpdate[userItem]}
+    },{}) 
+    await userRepository.update(userUpdated)
+    return userUpdated
+    // só pode editar se o ID existir, senão ele vai criar um novo (checar com o findById)
+    // findById --> Info do User
+        // Se entrar, user existe
+        // Só atualiza o que for diff
+        // reduce() no object.keys e retorna um novo objeto
 }
 
 function deleteUser (id) {
