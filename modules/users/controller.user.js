@@ -13,17 +13,17 @@ userRouter.get('/', authorization, async (req, res) => {
     res.send({ data: responseAllUsers });
 });
 
-userRouter.get('/:id', async (req,res) => {
+userRouter.get('/:id', authorization, async (req,res) => {
     const responseUserById = await findUserById(req.params.id)
     res.send({ data: responseUserById });
 });
   
-userRouter.post('/', validateName, async (req, res) => {
+userRouter.post('/', authorization, validateName, async (req, res) => {
     const newInstanceUser = await createNewUser(req.body);
     res.status(201).json({ data:newInstanceUser, message: "Usuário criado com sucesso!"})
 });
   
-userRouter.put('/:id?', async (req, res) => {
+userRouter.put('/:id?', authorization, async (req, res) => {
     try {
         const idUserUpdate = req.params.id
         const userUpdated = await updateUser(idUserUpdate, req.body)
@@ -33,7 +33,7 @@ userRouter.put('/:id?', async (req, res) => {
     } 
 });
   
-userRouter.delete('/:id?', (req, res) => {
+userRouter.delete('/:id?', authorization, (req, res) => {
     const UserDeleted = deleteUser(req.params.id)
     res.json({success:UserDeleted})
 });
