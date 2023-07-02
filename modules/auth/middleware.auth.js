@@ -1,8 +1,8 @@
-
-const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secret = require('../../config/token');
 const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-=_+{}[\]|;:",.<>/?]).{6,20}$/;
-const {compareCryptString} = require('../../utils/cryptstring')
+
  
 
 function isNotEmpty (req) {
@@ -66,9 +66,35 @@ function validatePassword (req, res, next) {
     next()
 }
 
+function authorization (req, res, next) {
+    try {
+        let headerToken = req.headers["authorization"];
+        const token = headerToken.split(' ')[1]
+        if (!token) {
+            return res.status(403).send({
+                message:'Usuário sem token'
+            });
+        }
+
+        jwt.verify(token, secret, (err, decoded) => {
+            if(err) {
+                return res.status(401).send({
+                    message:"Usuário sem autorização"
+                });
+            }
+            req.userId = decoded.id;
+            next();
+        });
+    } catch (error) {
+        return res.status(403).send({
+            message:'Usuário não pôde acessar'})
+    }
+}
+
 module.exports = { 
     validateUsername,
     validateEmail,
     validatePassword,
     validateName,  
-    isNotEmpty}
+    isNotEmpty,
+    authorization}

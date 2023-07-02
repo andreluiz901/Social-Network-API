@@ -3,7 +3,7 @@ const { createConnectionDatabase, disconnectDatabase } = require("../../config/d
 async function userExist(username) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'SELECT id FROM public.users WHERE username=$1 LIMIT 1', [username])
+        'SELECT * FROM public.users WHERE username=$1 LIMIT 1', [username])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows
 }
@@ -43,7 +43,8 @@ async function create({name, username, password, email}) {
 async function update({id, name, username, email}) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'UPDATE public.users SET username=$1 WHERE id=$2', [username, id])
+        'UPDATE public.users SET name=$1, username=$2, email=$3 WHERE id=$4', 
+        [name, username, email, id])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows
     // No SQL pesqusiar UPDATE com WHERE pelo Id

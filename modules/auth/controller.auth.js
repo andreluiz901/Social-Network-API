@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken')
+
 const {signUp,
         signIn} = require('./service.auth')
  const {    validateUsername,

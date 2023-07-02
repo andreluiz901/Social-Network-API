@@ -1,6 +1,8 @@
 const {createNewUser} = require('../users/service.user'); 
 const {encryptString,compareCryptString} = require('../../utils/cryptstring');
-const {findUserByUsername, findUserByEmail} = require('../users/repository.user')
+const {userExist, findUserByEmail} = require('../users/repository.user');
+const jwt = require('jsonwebtoken');
+const secret = require('../../config/token')
 
 function encryptPassword (password) {
     return encryptString(password)
@@ -9,22 +11,37 @@ function encryptPassword (password) {
 
 async function signIn({username, password}){
     
-    const foundUser = await findUserByUsername(username);
+    const foundUser = await userExist(username);
  
     if (foundUser.length > 0) {
-      const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
+        const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
+        
+        if (isSigInSuccefully) {
+            console.log('foundUser1', foundUser)
+            delete foundUser[0].password
+            console.log(foundUser)
 
-      return isSigInSuccefully;
-   
-    } 
-    
-    return null
+            const token = await jwt.sign(
+            {data: foundUser},
+            secret, 
+            {expiresIn:'1h'})
+        
+            console.log('token', token)
+
+            return {token}
+
+        }
+        
+        return isSigInSuccefully;
+    }
+
+    return null    
 }
 
 
 function signUp({name, username, email, password}) {
 
-    const existingUser = findUserByUsername(username);
+    const existingUser = userExist(username);
     if (existingUser.length > 0) {
         return null
     }
