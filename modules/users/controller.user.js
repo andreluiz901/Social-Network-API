@@ -6,8 +6,9 @@ const { gettAllUsers,
         deleteUser,
         validateName} = require('./service.user');
 const { findUserById } = require('./repository.user');
+const { authorization } = require('../auth/middleware.auth');
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', authorization, async (req, res) => {
     const responseAllUsers = await gettAllUsers()
     res.send({ data: responseAllUsers });
 });

@@ -6,9 +6,7 @@ function encryptString (word) {
 }
  
 async function compareCryptString(password, criptWord){
-    console.log(password, criptWord)
     const isMatch = await bcrypt.compare(password, criptWord); 
-    console.log(isMatch)
     return isMatch; 
 }
 

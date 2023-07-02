@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken')
 
 const {signUp,
         signIn} = require('./service.auth')
- const {    validateUsername,
-            validateEmail,
-            validatePassword,
-            validateName} = require('./middleware.auth')
+
+const {validateUsername,
+        validateEmail,
+        validatePassword,
+        validateName} = require('./middleware.auth')
 
 
 router.post('/signIn', async (req,res) => {
@@ -15,7 +15,7 @@ router.post('/signIn', async (req,res) => {
     const isSigInSuccefully = await signIn({username, password})
  
     if(isSigInSuccefully){
-        res.status(200).json({ message: "SignIn realizado com sucesso!"})
+        res.status(200).json({ message: "SignIn realizado com sucesso!", token: isSigInSuccefully})
         return 
     }
     res.status(401).json({ message: "Credenciais Inválidas"})

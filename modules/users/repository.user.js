@@ -1,6 +1,6 @@
 const { createConnectionDatabase, disconnectDatabase } = require("../../config/database")
 
-async function userExist(username) {
+async function userExistbyUsername(username) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
         'SELECT * FROM public.users WHERE username=$1 LIMIT 1', [username])
@@ -62,4 +62,4 @@ async function remove({id}) {
     return responseQuery 
 }
 
-module.exports = {userExist, findUserByEmail, findUserById, findAllUsers, create, update, remove};
+module.exports = {userExistbyUsername, findUserByEmail, findUserById, findAllUsers, create, update, remove};
