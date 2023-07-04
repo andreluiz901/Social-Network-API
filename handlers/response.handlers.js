@@ -1,4 +1,4 @@
-const responsesHandles = {
+const responsesHandlesMarkers = {
     // Informational Responses
     100:'Continue',
 
