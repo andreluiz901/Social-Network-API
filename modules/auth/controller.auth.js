@@ -11,6 +11,7 @@ const {validateUsername,
 
 
 router.post('/signIn', async (req,res) => {
+   try {
     const { username, password } = req.body;
     const isSigInSuccefully = await signIn({username, password})
  
@@ -19,21 +20,33 @@ router.post('/signIn', async (req,res) => {
         return 
     }
     res.status(401).json({ message: "Credenciais Inválidas"})
-})
+    
+   } catch (error) {
+    res.status(500).json({ message: "Ocorreu um erro inesperado no servidor"})
+   }
+    
+});
 
 
 router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, (req,res) => {
 
-    const { name, username, email, password } = req.body;
+    try {
+        const { name, username, email, password } = req.body;
 
-    const responseSignUp = signUp({ name, username, email, password })
+        const responseSignUp = signUp({ name, username, email, password })
 
  
-    if (responseSignUp) {
-        return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
+        if (responseSignUp) {
+            return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
+        }
+ 
+        res.status(400).json({ message: 'Não foi possível cadastrar o usuário, favor verifique se as informações estão corretas'}) 
+
+    } catch (error) {
+        res.status(500).json({ message: 'Ocorreu um erro inesperado do servidor'})
     }
- 
-    res.status(400).json({ message: 'Não foi possível cadastrar o usuário, favor verifique se as informações estão corretas'}) 
+
 });
+    
 
 module.exports = router;

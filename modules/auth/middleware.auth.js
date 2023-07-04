@@ -69,8 +69,12 @@ function validatePassword (req, res, next) {
 function authorization (req, res, next) {
     try {
         let headerToken = req.headers["authorization"];
-        const token = headerToken.split(' ')[1]
-        if (!token) {
+        const bearerToken = headerToken.split(' ')
+
+        const bearer = bearerToken[0]
+
+        const token = bearerToken[1]
+        if (!token || !bearer) {
             return res.status(403).send({
                 message:'Usuário sem token'
             });

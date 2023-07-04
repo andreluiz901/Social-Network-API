@@ -2,11 +2,11 @@ const {Client} = require('pg')
 
 async function createConnectionDatabase(){
     const client = new Client({
-        host: 'silly.db.elephantsql.com',
-        port: 5432,
-        database: 'kdyeimxj',
-        user: 'kdyeimxj',
-        password: '6tXR_yh3mpgIZpOgWXvPcjqQ2zhuP1ta'})
+        host: process.env.HOST_DATABASE,
+        port: process.env.PORT_DATABASE,
+        database: process.env.DATABASE,
+        user: process.env.USER_DATABASE,
+        password: process.env.PASSWORD_DATABASE})
     await client.connect()
     return client
 }
