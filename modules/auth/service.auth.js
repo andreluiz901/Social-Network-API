@@ -23,9 +23,6 @@ async function signIn({username, password}){
                 {data: foundUser},
                 secret, 
                 {expiresIn:'1h'})
-        
-            console.log('token', token)
-
             return token
 
         }
