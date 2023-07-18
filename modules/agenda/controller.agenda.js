@@ -1,14 +1,12 @@
 const express = require('express');
+const createNewAgendaPost = require('./services.agenda');
 const router = express.Router();
 
 router.post('/newPost', async (req, res) => {
-    try {
-        const {newPostMessage} = req.body
-        //const newPost = await createNewPost()
-        res.status(201).json({message:'post criado com sucesso', newPostMessage})
-    } catch (error) {
+        const newPost = await createNewAgendaPost(req.body);
+        console.log('newPost', newPost)
+        res.status(201).json({message:'post criado com sucesso', data:newPost})
 
-    }
 })
 
 
