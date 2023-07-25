@@ -31,9 +31,9 @@ router.post('/signIn', async (req,res) => {
 router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, (req,res) => {
 
     try {
-        const { name, username, email, password } = req.body;
+        const { fullName, username, email, password } = req.body;
 
-        const responseSignUp = signUp({ name, username, email, password })
+        const responseSignUp = signUp({ fullName, username, email, password })
 
  
         if (responseSignUp) {

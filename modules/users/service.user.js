@@ -4,8 +4,8 @@ function gettAllUsers() {
     return userRepository.findAllUsers()
 }
 
-function createNewUser({ name, username, password, email }) {        
-    return userRepository.create({name, username, password, email})
+function createNewUser({ fullName, username, password, email }) {        
+    return userRepository.create({fullName, username, password, email})
 }
  
 function findUserByUsername(username) {

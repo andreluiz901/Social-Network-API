@@ -34,7 +34,7 @@ async function signIn({username, password}){
 }
 
 
-function signUp({name, username, email, password}) {
+function signUp({fullName, username, email, password}) {
 
     const existingUser = userExistbyUsername(username);
     if (existingUser.length > 0) {
@@ -48,7 +48,7 @@ function signUp({name, username, email, password}) {
 
     const hashedPassword = encryptPassword(password);
     
-    const userCreated = createNewUser({name, username, email, password:hashedPassword});
+    const userCreated = createNewUser({fullName, username, email, password:hashedPassword});
 
     return userCreated
 }

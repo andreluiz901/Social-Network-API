@@ -16,10 +16,10 @@ function isNotEmpty (req) {
 
 
 function validateName (req, res, next) {
-    if(!req.body.name){
-        res.status(400).json({error:"Favor preencher o campo nome"})
+    if(!req.body.fullName){
+        res.status(400).json({error:"Favor preencher o campo nome completo (fullname)"})
         return
-    } else if (req.body.name.length < 4 ) {
+    } else if (req.body.fullName.length < 4 ) {
         res.status(400).json({error:"Favor preencher o campo nome com pelo menos 4 caracteres"})
         return
     }
@@ -62,7 +62,10 @@ function validatePassword (req, res, next) {
     if (!req.body.password.match(passwordFormat)) {
         return res.status(400).json({error:"Favor utilize uma senha que contenha de 6 a 20 dígitos, com um caractere maiúsculo, um minúsculo, um número e um especial."});
 
-    } 
+    }
+    if (!(req.body.password === req.body.confirmPassword)) {
+        return res.status(422).json({error:"Senhas precisam ser iguais."});
+    }
     next()
 }
 
