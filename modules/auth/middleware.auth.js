@@ -88,7 +88,8 @@ function authorization (req, res, next) {
                     message:"Usuário sem autorização"
                 });
             }
-            req.userId = decoded.id;
+            
+            req.userId = decoded.data[0].id;
             next();
         });
     } catch (error) {

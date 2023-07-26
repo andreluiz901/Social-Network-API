@@ -6,14 +6,16 @@ const secret = require('../config/token');
 
 function getNowDate() {
     const nowDate = new Date()
-    const year = nowDate.getFullYear()
-    const month = nowDate.getMonth() + 1 // returns 0-based, needs increment 1
-    const day = nowDate.getDate()
+    const nowDateUTC = nowDate.toUTCString()
+    // const year = nowDate.getFullYear()
+    // const month = nowDate.getMonth() + 1 // returns 0-based, needs increment 1
+    // const day = nowDate.getDate()
     // const hour = nowDate.getHours()
     // const minute = nowDate.getMinutes()
     // const second = nowDate.getSeconds()
-    const fullDate = `${year}/${month}/${day}`
-    return fullDate
+    // const fullDate = `${year}/${month}/${day}`
+    console.log("nowDateUTC", nowDateUTC)
+    return nowDateUTC/// fullDate
 }
 
 function recoverId(req) {
