@@ -3,9 +3,10 @@ const createNewAgendaPost = require('./services.agenda');
 const { authorization } = require('../auth/middleware.auth');
 const router = express.Router();
 
-router.post('/newPost', authorization, async (req, res) => {
+router.post('/', authorization, async (req, res) => {
         try {
-                const newPost = await createNewAgendaPost(req);
+                const ownerId = req.userId
+                const newPost = await createNewAgendaPost(ownerId, req.body);
                 res.status(201).json({message:'post criado com sucesso', data:newPost})
         } catch (error) {
                 console.log(error)

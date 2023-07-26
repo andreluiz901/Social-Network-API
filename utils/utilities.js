@@ -13,7 +13,6 @@ function getNowDate() {
     // const minute = nowDate.getMinutes()
     // const second = nowDate.getSeconds()
     const fullDate = `${year}/${month}/${day}`
-    console.log("fulldate", fullDate)
     return fullDate
 }
 

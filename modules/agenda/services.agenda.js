@@ -2,11 +2,11 @@ const { getNowDate, recoverId } = require('../../utils/utilities')
 const agendaRepository = require('./repository.agenda')
 
 
-function createNewAgendaPost(req) {
-    const {message} = req.body
+function createNewAgendaPost(ownerdId, agendaPayload) {
+    const {message} = agendaPayload
     const dateNow = getNowDate()
-    const idOwnerPost = recoverId(req)
-    const newPostCreated = agendaRepository.createNewPost(message, dateNow, idOwnerPost)
+    // const idOwnerPost = recoverId(req)
+    const newPostCreated = agendaRepository.createNewPost(message, dateNow, ownerdId)
     return newPostCreated
 }
 
