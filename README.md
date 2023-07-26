@@ -28,7 +28,7 @@ Neste projeto estou desenvolvendo rotas de CRUD (Create, Read, Update e Delete).
 
 Atenção: Exemplo de link Ngrok (Esse link sempre mudará ao executar a abertura pelo Ngrok, mas vou tentar deixar atualizado e verificar sempre que abrir o servidor).
 
-https://e42f-2804-29b8-500c-3ec9-64e0-2c5d-2189-d54e.ngrok-free.app
+https://d210-2804-29b8-500c-eff-c2c-6b9e-da38-5251.ngrok-free.app
 
 Acessar através deste link deve lhe direcionar para o meu endereço local:
 

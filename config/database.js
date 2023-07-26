@@ -6,7 +6,8 @@ async function createConnectionDatabase(){
         port: process.env.PORT_DATABASE,
         database: process.env.DATABASE,
         user: process.env.USER_DATABASE,
-        password: process.env.PASSWORD_DATABASE})
+        password: process.env.PASSWORD_DATABASE,
+        buffer_size: 33554432})
     await client.connect()
     return client
 }

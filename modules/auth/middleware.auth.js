@@ -73,7 +73,6 @@ function authorization (req, res, next) {
     try {
         let headerToken = req.headers["authorization"];
         const bearerToken = headerToken.split(' ')
-
         const bearer = bearerToken[0]
 
         const token = bearerToken[1]
@@ -85,7 +84,7 @@ function authorization (req, res, next) {
 
         jwt.verify(token, secret, (err, decoded) => {
             if(err) {
-                return res.status(401).send({
+                return res.status(401).send({   
                     message:"Usuário sem autorização"
                 });
             }

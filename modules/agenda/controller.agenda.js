@@ -4,8 +4,14 @@ const { authorization } = require('../auth/middleware.auth');
 const router = express.Router();
 
 router.post('/newPost', authorization, async (req, res) => {
-        const newPost = await createNewAgendaPost(req.body);
-        res.status(201).json({message:'post criado com sucesso', data:newPost})
+        try {
+                const newPost = await createNewAgendaPost(req);
+                res.status(201).json({message:'post criado com sucesso', data:newPost})
+        } catch (error) {
+                console.log(error)
+                res.status(500).json({message:'ocorreu um erro no servidor, não foi possível fazer o post', error: error})
+        }
+        
 
 })
 
