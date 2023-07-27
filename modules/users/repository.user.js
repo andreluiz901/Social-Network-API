@@ -8,6 +8,14 @@ async function userExistbyUsernameOrEmail(username, email) {
     return responseQuery.rowCount
 }
 
+async function findUserByUsername(username) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query(
+        'SELECT * FROM public.users WHERE username=$1', [username])
+    await disconnectDatabase(clientDatabase)
+    return responseQuery.rows
+}
+
 async function findUserByEmail(email) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
@@ -57,4 +65,4 @@ async function remove({id}) {
     return responseQuery 
 }
 
-module.exports = {userExistbyUsernameOrEmail, findUserByEmail, findUserById, findAllUsers, create, update, remove};
+module.exports = {userExistbyUsernameOrEmail, findUserByUsername, findUserByEmail, findUserById, findAllUsers, create, update, remove};

@@ -1,4 +1,4 @@
-const { getNowDate, recoverId } = require('../../utils/utilities')
+const { getNowDate } = require('../../utils/utilities')
 const agendaRepository = require('./repository.agenda')
 
 
@@ -9,4 +9,8 @@ function createNewAgendaPost(ownerdId, agendaPayload) {
     return newPostCreated
 }
 
-module.exports = createNewAgendaPost
+function getPostsAgendaPaginated(page, limit) {
+    return agendaRepository.getPostAgendaPageLimit(page, limit)
+}
+
+module.exports = {createNewAgendaPost, getPostsAgendaPaginated}
