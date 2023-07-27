@@ -3,8 +3,6 @@ const secret = require('../../config/token');
 const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-=_+{}[\]|;:",.<>/?]).{6,20}$/;
 
- 
-
 function isNotEmpty (req) {
     if (req.body.name || req.body.username || req.body.password || req.body.email) {
         return true
