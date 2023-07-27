@@ -44,7 +44,6 @@ async function signUp({fullName, username, email, password}) {
     const hashedPassword = encryptPassword(password);
     
     const userCreated = await createNewUser({fullName, username, email, password:hashedPassword});
-
     return userCreated
 }
 
