@@ -47,11 +47,6 @@ async function update({id, name, username, email}) {
         [name, username, email, id])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows
-    // No SQL pesqusiar UPDATE com WHERE pelo Id
-    // Essa função tem que receber o Id e as informações que serão alteradas pelo usuário
-    // será possível alterar 1 propriedade, permanecendo as demais intactas
-    // Não será possível alterar senha pelo update (que terá outra rota para alterar apenas senha)
-    // algumas coisas serão feitas pelo service
 }
 
 async function remove({id}) {

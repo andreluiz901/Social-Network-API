@@ -5,7 +5,6 @@ const agendaRepository = require('./repository.agenda')
 function createNewAgendaPost(ownerdId, agendaPayload) {
     const {message} = agendaPayload
     const dateNow = getNowDate()
-    // const idOwnerPost = recoverId(req)
     const newPostCreated = agendaRepository.createNewPost(message, dateNow, ownerdId)
     return newPostCreated
 }

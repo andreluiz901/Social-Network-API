@@ -1,9 +1,10 @@
 const express = require('express');
 const createNewAgendaPost = require('./services.agenda');
 const { authorization } = require('../auth/middleware.auth');
+const validateMessagePost = require('./middleware.agenda');
 const router = express.Router();
 
-router.post('/', authorization, async (req, res) => {
+router.post('/', authorization, validateMessagePost,  async (req, res) => {
         try {
                 const ownerId = req.userId
                 const newPost = await createNewAgendaPost(ownerId, req.body);
