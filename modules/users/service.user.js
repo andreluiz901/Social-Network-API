@@ -4,8 +4,9 @@ function gettAllUsers() {
     return userRepository.findAllUsers()
 }
 
-function createNewUser({ fullName, username, password, email }) {        
-    return userRepository.create({fullName, username, password, email})
+async function createNewUser({ fullName, username, password, email }) {        
+    const newUser = await userRepository.create({fullName, username, password, email})
+    return newUser
 }
  
 function findUserByUsername(username) {

@@ -3,7 +3,7 @@ const { createConnectionDatabase, disconnectDatabase } = require("../../config/d
 async function userExistbyUsername(username) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'SELECT * FROM public.users WHERE username=$1 LIMIT 1', [username])
+        'SELECT username FROM public.users WHERE username=$1 LIMIT 1', [username])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows
 }
@@ -11,7 +11,7 @@ async function userExistbyUsername(username) {
 async function findUserByEmail(email) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'SELECT * FROM public.users WHERE email=$1', [email])
+        'SELECT email FROM public.users WHERE email=$1', [email])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows
 }
@@ -37,7 +37,7 @@ async function create({fullName, username, password, email}) {
     const responseQuery = await clientDatabase.query(
         'INSERT INTO public.users ("fullName", username, password, email) VALUES ($1, $2, $3, $4) RETURNING id', [fullName, username, password, email])
     await disconnectDatabase(clientDatabase)
-    return {id:responseQuery.rows[0].id, fullName, username, password, email}
+    return {id:responseQuery.rows[0].id, fullName, username, email}
 }
 
 async function update({id, name, username, email}) {

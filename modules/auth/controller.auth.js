@@ -28,12 +28,12 @@ router.post('/signIn', async (req,res) => {
 });
 
 
-router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, (req,res) => {
+router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, async (req,res) => {
 
     try {
         const { fullName, username, email, password } = req.body;
 
-        const responseSignUp = signUp({ fullName, username, email, password })
+        const responseSignUp = await signUp(res, { fullName, username, email, password })
 
  
         if (responseSignUp) {

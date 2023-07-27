@@ -34,21 +34,21 @@ async function signIn({username, password}){
 }
 
 
-function signUp({fullName, username, email, password}) {
+async function signUp(res, {fullName, username, email, password}) {
 
-    const existingUser = userExistbyUsername(username);
+    const existingUser = await userExistbyUsername(username);
     if (existingUser.length > 0) {
         return null
     }
 
-    const existingEmail = findUserByEmail(email);
+    const existingEmail = await findUserByEmail(email);
     if (existingEmail.length > 0) {
         return null
     }
 
     const hashedPassword = encryptPassword(password);
     
-    const userCreated = createNewUser({fullName, username, email, password:hashedPassword});
+    const userCreated = await createNewUser({fullName, username, email, password:hashedPassword});
 
     return userCreated
 }
