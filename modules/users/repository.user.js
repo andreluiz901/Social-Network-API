@@ -1,11 +1,11 @@
 const { createConnectionDatabase, disconnectDatabase } = require("../../config/database")
 
-async function userExistbyUsername(username) {
+async function userExistbyUsernameOrEmail(username, email) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'SELECT username FROM public.users WHERE username=$1 LIMIT 1', [username])
+        'SELECT username, email FROM public.users WHERE (username=$1) OR (email=$2) LIMIT 1', [username, email])
     await disconnectDatabase(clientDatabase)
-    return responseQuery.rows
+    return responseQuery.rowCount
 }
 
 async function findUserByEmail(email) {
@@ -57,4 +57,4 @@ async function remove({id}) {
     return responseQuery 
 }
 
-module.exports = {userExistbyUsername, findUserByEmail, findUserById, findAllUsers, create, update, remove};
+module.exports = {userExistbyUsernameOrEmail, findUserByEmail, findUserById, findAllUsers, create, update, remove};
