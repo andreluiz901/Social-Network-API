@@ -19,7 +19,11 @@ router.get('/post', async (req, res) => {
         try {
                 const {page, limit} = req.query
                 const responsePostPage = await getPostsAgendaPaginated(page, limit)
-                res.status(200).json({data: responsePostPage.data, page:page, limit: limit, count:responsePostPage.count})
+                res.status(200).json(
+                        {data: responsePostPage.data, 
+                        page:parseInt(page), 
+                        limit: parseInt(limit), 
+                        count:parseInt(responsePostPage.count)})
         } catch (error) {
                 console.log(error)
                 res.status(500).json({message:'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error})

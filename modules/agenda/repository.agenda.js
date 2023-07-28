@@ -19,13 +19,5 @@ async function getPostAgendaPageLimit(offset, limit) {
     )
     await disconnectDatabase(clientDatabase)
     return {count:totalRows.rows[0].count, data:responseQuery.rows}
-    // {
-    //     "data":[
-           
-    //     ],
-    //     "page":1,
-    //     "limit":20,
-    //     "count":30
-    //  }
 }
 module.exports = {createNewPost, getPostAgendaPageLimit}
