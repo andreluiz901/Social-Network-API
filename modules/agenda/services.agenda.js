@@ -10,7 +10,8 @@ function createNewAgendaPost(ownerdId, agendaPayload) {
 }
 
 function getPostsAgendaPaginated(page, limit) {
-    return agendaRepository.getPostAgendaPageLimit(page, limit)
+    const offsetPage = (limit*page)-limit
+    return agendaRepository.getPostAgendaPageLimit(offsetPage, limit)
 }
 
 module.exports = {createNewAgendaPost, getPostsAgendaPaginated}
