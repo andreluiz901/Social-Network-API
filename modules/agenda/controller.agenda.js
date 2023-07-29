@@ -31,4 +31,17 @@ router.get('/post', async (req, res) => {
         
 })
 
+router.delete('/post/:id?', authorization, async (req, res) => {
+        try {
+                const idUser = req.userId
+                const {idPost} = req.params
+                const deletePostAgenda = deletePostAgenda(idUser, idPost)    
+        } catch (error) {
+                console.log(error)
+
+        }
+})
+
+
+
 module.exports = router

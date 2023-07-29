@@ -20,4 +20,15 @@ async function getPostAgendaPageLimit(offset, limit) {
     await disconnectDatabase(clientDatabase)
     return {count:totalRows.rows[0].count, data:responseQuery.rows}
 }
+
+
+async function checkOwnerPost(idUser, idPost) {
+    const clientDatabase = await createConnectionDatabase();
+    const responseQuery = await clientDatabase.query(
+        ''
+    )
+}
+
+
+
 module.exports = {createNewPost, getPostAgendaPageLimit}

@@ -14,4 +14,10 @@ function getPostsAgendaPaginated(page, limit) {
     return agendaRepository.getPostAgendaPageLimit(offsetPage, limit)
 }
 
-module.exports = {createNewAgendaPost, getPostsAgendaPaginated}
+function deletePostAgenda(idUser, idPost) {
+
+    const isOwnerPost = agendaRepository.checkOwnerPost(idUser, idPost)
+
+}
+
+module.exports = {createNewAgendaPost, getPostsAgendaPaginated, deletePostAgenda}
