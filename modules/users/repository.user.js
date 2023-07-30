@@ -62,7 +62,7 @@ async function remove({id}) {
     const responseQuery = await clientDatabase.query(
         'DELETE FROM public.users WHERE id=$1', [id])
     await disconnectDatabase(clientDatabase)
-    return responseQuery 
+    return console.log(responseQuery) 
 }
 
 module.exports = {userExistbyUsernameOrEmail, findUserByUsername, findUserByEmail, findUserById, findAllUsers, create, update, remove};

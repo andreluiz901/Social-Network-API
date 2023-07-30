@@ -14,9 +14,18 @@ function getPostsAgendaPaginated(page, limit) {
     return agendaRepository.getPostAgendaPageLimit(offsetPage, limit)
 }
 
-function deletePostAgenda(idUser, idPost) {
-
-    const isOwnerPost = agendaRepository.checkOwnerPost(idUser, idPost)
+async function deletePostAgenda(idUser, idPost) {
+    return agendaRepository.deletePost(idUser, idPost)
+    // const isOwnerPost = await agendaRepository.checkOwnerPost(idUser, idPost)
+    // if (String(isOwnerPost.rows)) {
+    //     console.log("ownerPost", isOwnerPost)
+    //     return agendaRepository.deletePost(idUser, idPost)
+    //     //return {message:"Post Deletado com sucesso", idPost:isOwnerPost.rows[0].id, messagePost:isOwnerPost.rows[0].message}
+    // } else {
+    //     console.log("ownerPostElse", isOwnerPost)
+    //     return {message:"Este Post não existe ou o Usuário não é o dono do Post"}
+         
+    // }
 
 }
 

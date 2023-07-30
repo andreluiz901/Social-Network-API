@@ -22,13 +22,22 @@ async function getPostAgendaPageLimit(offset, limit) {
 }
 
 
-async function checkOwnerPost(idUser, idPost) {
+// async function checkOwnerPost(idUser, idPost) {
+//     const clientDatabase = await createConnectionDatabase();
+//     const responseQuery = await clientDatabase.query(
+//         'SELECT id, message FROM public.posts WHERE id_creator = $1 AND id=$2', [idUser, idPost])
+//     await disconnectDatabase(clientDatabase)
+//     return await {count:responseQuery.rows[0], rows:responseQuery.rows}
+// }
+
+async function deletePost(idUser, idPost){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        ''
-    )
+        'DELETE FROM public.posts WHERE id_creator=$1 AND id=$2', [idUser, idPost])
+    await disconnectDatabase(clientDatabase)
+    return await responseQuery
 }
 
 
 
-module.exports = {createNewPost, getPostAgendaPageLimit}
+module.exports = {createNewPost, getPostAgendaPageLimit, deletePost}

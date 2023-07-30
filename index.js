@@ -11,21 +11,19 @@ const cors = require('cors')
 
 
 const corsOpts = {
-    origin: '*',
   
     methods: [
       'GET',
       'POST',
       'PUT',
       'DELETE'
-    ],
-  
-    allowedHeaders: [
-      'Content-Type',
-    ],
+    ]
 };
   
-server.use(cors(corsOpts));
+server.use(cors({ "origin": "*",
+"methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+"preflightContinue": true,
+"optionsSuccessStatus": 204}));
 
 
 server.use('/users', userController);

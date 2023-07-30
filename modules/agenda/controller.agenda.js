@@ -1,5 +1,5 @@
 const express = require('express');
-const {createNewAgendaPost, getPostsAgendaPaginated} = require('./services.agenda');
+const {createNewAgendaPost, getPostsAgendaPaginated, deletePostAgenda} = require('./services.agenda');
 const { authorization } = require('../auth/middleware.auth');
 const validateMessagePost = require('./middleware.agenda');
 const router = express.Router();
@@ -34,10 +34,12 @@ router.get('/post', async (req, res) => {
 router.delete('/post/:id?', authorization, async (req, res) => {
         try {
                 const idUser = req.userId
-                const {idPost} = req.params
-                const deletePostAgenda = deletePostAgenda(idUser, idPost)    
+                const idPost = req.params.id
+                const deleteAgendaPost = await deletePostAgenda(idUser, idPost)
+                console.log("deleteAgendaPost", deleteAgendaPost)
+                res.status(200).json({data:deleteAgendaPost})
         } catch (error) {
-                console.log(error)
+                console.log("error", error)
 
         }
 })
