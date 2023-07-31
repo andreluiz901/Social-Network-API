@@ -16,7 +16,7 @@ router.post('/signIn', async (req,res) => {
     const isSigInSuccefully = await signIn({username, password})
  
     if(isSigInSuccefully){
-        res.status(200).json({ message: "SignIn realizado com sucesso!", token: isSigInSuccefully})
+        res.status(200).json(isSigInSuccefully)
         return 
     }
     res.status(401).json({ message: "Credenciais Inválidas"})

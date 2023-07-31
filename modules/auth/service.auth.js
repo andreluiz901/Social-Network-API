@@ -12,22 +12,25 @@ function encryptPassword (password) {
 async function signIn({username, password}){
     
     const foundUser = await findUserByUsername(username);
- 
+    
     if (foundUser) {
         const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
-        
         if (isSigInSuccefully) {
             delete foundUser[0].password
-            
+
             const token = await jwt.sign(
                 {data: foundUser},
                 secret, 
-                {expiresIn:'1h'})
-            return token
+                {expiresIn:'1h'}
+            )
+
+        
+        return {access_token: token,
+                data:{fullName:foundUser[0].fullName, username:foundUser[0].username, email:foundUser[0].email},}
 
         }
-
-        return isSigInSuccefully;
+        
+    return isSigInSuccefully;
     }
 
     return null    
