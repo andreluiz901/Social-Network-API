@@ -36,10 +36,9 @@ router.delete('/post/:id?', authorization, async (req, res) => {
                 const idUser = req.userId
                 const idPost = req.params.id
                 const deleteAgendaPost = await deletePostAgenda(idUser, idPost)
-                console.log("deleteAgendaPost", deleteAgendaPost)
-                res.status(200).json({data:deleteAgendaPost})
+                res.status(deleteAgendaPost.status).json({message:deleteAgendaPost.message})
         } catch (error) {
-                console.log("error", error)
+                res.status(500).json({erro:'ocorreu um erro no servidor, não foi possível deletar o post', erro: error})
 
         }
 })

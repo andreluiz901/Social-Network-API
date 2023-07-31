@@ -12,7 +12,6 @@ function encryptPassword (password) {
 async function signIn({username, password}){
     
     const foundUser = await findUserByUsername(username);
-    console.log(foundUser)
  
     if (foundUser) {
         const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
