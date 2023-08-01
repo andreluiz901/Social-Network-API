@@ -70,6 +70,7 @@ function validatePassword (req, res, next) {
 function authorization (req, res, next) {
     try {
         let headerToken = req.headers["authorization"];
+        
         const bearerToken = headerToken.split(' ')
         const bearer = bearerToken[0]
 
