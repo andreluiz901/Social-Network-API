@@ -19,7 +19,7 @@ async function deletePostAgenda(idUser, idPost) {
     if (parseInt(isOwnerPost.rowCount)) {
         return {message:"Post Deletado com sucesso", status:200}
     } else {
-        return {message:"Este Post não existe ou o Usuário não é o dono do Post", status:403}
+        return {message:"Não foi possível deletar o post", status:403}
     }
 
 }
