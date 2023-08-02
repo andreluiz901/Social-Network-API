@@ -47,7 +47,12 @@ router.put('/post/:id?', authorization, async (req,res) => {
                 const idPost = req.params.id
                 const {message} = req.body
                 const updatePost = await updateAgendaPost(idUser, idPost, message)
-                res.status(updatePost.status).json({message:updatePost.message})
+                res.status(updatePost.status).json(
+                        {data:{
+                                idUser:idUser, 
+                                idPost:parseInt(idPost), 
+                                message:message}, 
+                        message:updatePost.message})
         } catch (error) {
                 res.status(500).json({message:'ocorreu um erro no servidor, não foi possível atualizar o post', erro: error})
         }

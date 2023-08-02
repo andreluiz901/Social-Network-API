@@ -28,7 +28,7 @@ async function updateAgendaPost(idUser, idPost, message){
     const dateUpdate = getNowDate()
     const isOwnerPost = await agendaRepository.updatePost(idUser, idPost, message, dateUpdate)
     if (parseInt(isOwnerPost.rowCount)) {
-        return {message:isOwnerPost.rows[0].message, status:200}
+        return {message:"Mensagem atualizada com sucesso: " + isOwnerPost.rows[0].message, status:200}
     } else {
         return {message:"Não foi possível deletar o post", status:403}
     }
