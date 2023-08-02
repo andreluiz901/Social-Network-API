@@ -32,8 +32,7 @@ async function deletePost(idUser, idPost){
 async function updatePost(idUser, idPost, message, dateUpdate){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        'UPDATE public.posts SET message=$1, date_last_update=$2 WHERE id_creator=$3 AND id=$4 RETURNING message', [message, dateUpdate, idUser, idPost]
-    )
+        'UPDATE public.posts SET message=$1, date_last_update=$2 WHERE id_creator=$3 AND id=$4 RETURNING message', [message, dateUpdate, idUser, idPost])
     await disconnectDatabase(clientDatabase)
     return responseQuery
 }
