@@ -52,7 +52,7 @@ router.put('/post/:id?', authorization, async (req,res) => {
                                 idUser:idUser, 
                                 idPost:parseInt(idPost), 
                                 message:message}, 
-                        message:updatePost.message})
+                        message:"Postagem atualizada com sucesso"})
         } catch (error) {
                 res.status(500).json({message:'ocorreu um erro no servidor, não foi possível atualizar o post', erro: error})
         }
