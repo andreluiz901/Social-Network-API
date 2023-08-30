@@ -41,7 +41,7 @@ router.delete('/post/:id?', authorization, async (req, res) => {
         }
 })
 
-router.put('/post/:id?', authorization, async (req,res) => {
+router.put('/post/:id?', authorization, validateMessagePost, async (req,res) => {
         try {
                 const idUser = req.userId
                 const idPost = req.params.id
