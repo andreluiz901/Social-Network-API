@@ -44,6 +44,12 @@ Jj-->L(response)
 Kk-->L(response)
 ```
 
+De modo complementar, o *schema* do banco de dados da api se encontra atualmente disposto da forma abaixo. Acredito que a imagem abaixo vai ajudar a entender como foram montadas as *querys* do repository e as chamadas de bancos de dados:
+<center>
+
+![schema banco de dados da aplicação](imgs\database_schema_img01.PNG)
+
+</center>
 
 ## INSTALAÇÃO E CONFIG
 
