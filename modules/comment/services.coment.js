@@ -16,12 +16,19 @@ async function createNewAgendaComment(ownerIdComment, agendaPayload) {
 async function readAgendaComment(ownerIdComment, idPost) {
     
     if (await commentsRepository.checkPostExist(idPost)){
-        const readComment = await commentsRepository.readUnreadComment(ownerIdComment, idPost)
-        return {is_read:readComment.rows[0].is_read}
+        if (ownerIdComment === await commentsRepository.checkOwnerPost(idPost)){
+            const getIdComment = await commentsRepository.getIdCommentForRead(ownerIdComment, idPost)
+            const readUnreadComment = await commentsRepository.readUnreadComment(getIdComment)
+            return {is_read:readUnreadComment}
+        }
     } else {
         throw new Error("Não foi possível marcar a leitura do comentário")
     }
 
+}
+
+async function deleteAgendaComment(ownerIdComment, idPost){
+    
 }
 
 module.exports = {createNewAgendaComment, readAgendaComment}

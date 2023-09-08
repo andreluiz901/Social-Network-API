@@ -22,6 +22,7 @@ router.post('/signIn', async (req,res) => {
     res.status(401).json({ message: "Credenciais Inválidas"})
     
    } catch (error) {
+    console.log(error.message)
     res.status(500).json({ message: "Ocorreu um erro inesperado no servidor"})
    }
     

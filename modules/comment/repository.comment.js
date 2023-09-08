@@ -20,14 +20,33 @@ async function checkPostExist(idPost) {
     return parseInt(responseQuery.rows[0].count)
 }
 
-async function readUnreadComment(ownerIdComment, postId){
+
+async function checkOwnerPost(postId){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        'select * FROM public.comments as c INNER JOIN public.posts as p ON p.id = c.id_post where p.id_creator=$1 and c.id_post=$2', 
+        'select id_creator from public.posts where id = $1', 
+        [postId])
+    await disconnectDatabase(clientDatabase)
+    return responseQuery.rows[0].id_creator
+}
+
+async function getIdCommentForRead(ownerIdComment, postId){
+    const clientDatabase = await createConnectionDatabase();
+    const responseQuery = await clientDatabase.query(
+        'select c.id FROM public.comments as c INNER JOIN public.posts as p ON p.id = c.id_post where p.id_creator=$1 and c.id_post=$2', 
         [ownerIdComment, postId])
     await disconnectDatabase(clientDatabase)
-    return responseQuery
+    return responseQuery.rows[0].id
+}
+
+async function readUnreadComment(getIdComment){
+    const clientDatabase = await createConnectionDatabase();
+    const responseQuery = await clientDatabase.query(
+        'update public.comments set is_read = (case when public.comments.is_read = true then false else true end) where id = $1 RETURNING is_read', 
+        [getIdComment])
+    await disconnectDatabase(clientDatabase)
+    return responseQuery.rows[0].is_read
 }
 
 
-module.exports = {createNewComment, checkPostExist, readUnreadComment}
+module.exports = {createNewComment, checkPostExist, checkOwnerPost, getIdCommentForRead, readUnreadComment}
