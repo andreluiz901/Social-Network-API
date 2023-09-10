@@ -24,11 +24,15 @@ async function readAgendaComment(ownerIdComment, idPost) {
     } else {
         throw new Error("Não foi possível marcar a leitura do comentário")
     }
-
 }
 
 async function deleteAgendaComment(ownerIdComment, idPost){
-    
+
+    if (ownerIdComment === await commentsRepository.checkOwnerPost(idPost)){
+        const deleteComment = commentsRepository.deleteAgendaComment(idPost)
+    } else {
+        throw new Error("Não foi possível marcar a leitura do comentário")
+    }
 }
 
-module.exports = {createNewAgendaComment, readAgendaComment}
+module.exports = {createNewAgendaComment, readAgendaComment, deleteAgendaComment}

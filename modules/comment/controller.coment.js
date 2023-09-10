@@ -1,7 +1,7 @@
 const express = require('express');
 const { authorization } = require('../auth/middleware.auth');
 const validateMessagePost = require('../agenda/middleware.agenda');
-const { createNewAgendaComment, readAgendaComment } = require('./services.coment');
+const { createNewAgendaComment, readAgendaComment, deleteAgendaComment } = require('./services.coment');
 const router = express.Router();
 
 

@@ -48,5 +48,8 @@ async function readUnreadComment(getIdComment){
     return responseQuery.rows[0].is_read
 }
 
+async function deleteAgendaComment(idPost){
 
-module.exports = {createNewComment, checkPostExist, checkOwnerPost, getIdCommentForRead, readUnreadComment}
+}
+
+module.exports = {createNewComment, checkPostExist, checkOwnerPost, getIdCommentForRead, readUnreadComment, deleteAgendaComment}
