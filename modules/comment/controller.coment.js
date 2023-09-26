@@ -18,6 +18,7 @@ router.post('/', authorization, validateMessagePost, async(req, res) => {
 router.patch('/read/:id?', authorization, async(req, res) => {
     try{
         const ownerIdcomment = req.userId
+        //era pra ser idComment
         const idPost = req.params.id
         const readComment = await readAgendaComment(ownerIdcomment, idPost)
         res.status(201).json({data:readComment, message:"Comentário marcado com sucesso"})
