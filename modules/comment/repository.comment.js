@@ -20,11 +20,20 @@ async function checkPostExist(idPost) {
     return parseInt(responseQuery.rows[0].count)
 }
 
+async function getPostOwnerIdByIdComment(idComment){
+    const clientDatabase = await createConnectionDatabase();
+    const responseQuery = await clientDatabase.query(
+        `select id_creator from public.comments as c join public.posts as p 
+        on c.id_post = p.id where c.id = $1`, // aqui tem que ser um join, para ver o creator pelo coment? 
+        [idComment])
+    await disconnectDatabase(clientDatabase)
+    return responseQuery.rows[0].id_creator
+}
 
 async function checkOwnerPost(postId){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        'select id_creator from public.posts where id = $1', 
+        'select id_creator from public.posts where id = $1', // aqui tem que ser um join, para ver o creator pelo coment? 
         [postId])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows[0].id_creator
@@ -39,11 +48,11 @@ async function getIdCommentForRead(ownerIdComment, postId){
     return responseQuery.rows[0].id
 }
 
-async function readUnreadComment(getIdComment){
+async function readUnreadComment(idComment){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
         'update public.comments set is_read = (case when public.comments.is_read = true then false else true end) where id = $1 RETURNING is_read', 
-        [getIdComment])
+        [idComment])
     await disconnectDatabase(clientDatabase)
     return responseQuery.rows[0].is_read
 }
@@ -52,4 +61,10 @@ async function deleteAgendaComment(idPost){
 
 }
 
-module.exports = {createNewComment, checkPostExist, checkOwnerPost, getIdCommentForRead, readUnreadComment, deleteAgendaComment}
+module.exports = {createNewComment, 
+                checkPostExist, 
+                checkOwnerPost, 
+                getIdCommentForRead, 
+                readUnreadComment, 
+                deleteAgendaComment,
+                getPostOwnerIdByIdComment}
