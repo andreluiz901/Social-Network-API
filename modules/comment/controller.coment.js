@@ -30,9 +30,9 @@ router.patch('/read/:id?', authorization, async(req, res) => {
 
 router.delete('/:id?', authorization, async (req,res) => {
     try {
-        const ownerIdComment = req.userId
-        const idPost = req.params.id
-        const deleteComment = await deleteAgendaComment(ownerIdComment, idPost)
+        const idUserLogado = req.userId
+        const idComment = req.params.id
+        const deleteComment = await deleteAgendaComment(idUserLogado, idComment)
         res.status(200).json({data:deleteComment, message:"Comentário excluído com sucesso"})
     } catch (error) {
         console.log(error)

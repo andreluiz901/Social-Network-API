@@ -25,12 +25,15 @@ async function readAgendaComment(idUserLogado, idComment) {
     }
 }
 
-async function deleteAgendaComment(ownerIdComment, idPost){
+async function deleteAgendaComment(ownerIdComment, idComment){
 
-    if (ownerIdComment === await commentsRepository.checkOwnerPost(idPost)){
-        const deleteComment = commentsRepository.deleteAgendaComment(idPost)
+    const idOwnerCommentByCommentId = await commentsRepository.getidOwnerCommentByCommentId(idComment)
+    
+    if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId){
+            const deleteComment = commentsRepository.deleteAgendaComment(idComment)
+            return deleteComment
     } else {
-        throw new Error("Não foi possível marcar a leitura do comentário")
+        throw new Error("Não foi possível deletar o comentário")
     }
 }
 
