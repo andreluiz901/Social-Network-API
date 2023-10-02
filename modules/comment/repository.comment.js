@@ -57,21 +57,21 @@ async function readUnreadComment(idComment){
     return responseQuery.rows[0].is_read
 }
 
-async function getidOwnerCommentByCommentId(idComment){
+async function getIdOwnerCommentByCommentId(idComment){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
         'SELECT id_owner FROM public.comments where id=$1', 
         [idComment])
     await disconnectDatabase(clientDatabase)
-    return responseQuery.rows[0].id_owner
+    return responseQuery.rows[0]
 }
-async function deleteAgendaComment(idComment){
+async function deleteComment(idComment){
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        'DELETE FROM public.comments where id=$1', 
+        'DELETE FROM public.comments where id=$1 returning *', 
         [idComment])
     await disconnectDatabase(clientDatabase)
-    return responseQuery.rowsCount
+    return responseQuery
 }
 
 module.exports = {createNewComment, 
@@ -79,6 +79,6 @@ module.exports = {createNewComment,
                 checkOwnerPost, 
                 getIdCommentForRead, 
                 readUnreadComment, 
-                deleteAgendaComment,
+                deleteComment,
                 getPostOwnerIdByIdComment,
-                getidOwnerCommentByCommentId}
+                getIdOwnerCommentByCommentId}

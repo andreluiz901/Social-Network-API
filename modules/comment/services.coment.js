@@ -27,11 +27,11 @@ async function readAgendaComment(idUserLogado, idComment) {
 
 async function deleteAgendaComment(ownerIdComment, idComment){
 
-    const idOwnerCommentByCommentId = await commentsRepository.getidOwnerCommentByCommentId(idComment)
-    
-    if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId){
-            const deleteComment = commentsRepository.deleteAgendaComment(idComment)
-            return deleteComment
+    const idOwnerCommentByCommentId = await commentsRepository.getIdOwnerCommentByCommentId(idComment)
+
+    if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId.id_owner){
+            const isCommentDeleted = await commentsRepository.deleteComment(idComment)
+            return isCommentDeleted.rows[0]
     } else {
         throw new Error("Não foi possível deletar o comentário")
     }
