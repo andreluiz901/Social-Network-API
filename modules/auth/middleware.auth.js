@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const secret = require('../../config/token');
+const Joi = require('joi');
+const schemas = require('../../config/schema')
 const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-=_+{}[\]|;:",.<>/?]).{6,20}$/;
 
@@ -12,6 +14,9 @@ function isNotEmpty (req) {
     next()
 }
 
+function authSchemaValidator(req, res, next){
+
+}
 
 function validateName (req, res, next) {
     if(!req.body.fullName){
@@ -103,4 +108,5 @@ module.exports = {
     validatePassword,
     validateName,  
     isNotEmpty,
-    authorization}
+    authorization,
+    authSchemaValidator}

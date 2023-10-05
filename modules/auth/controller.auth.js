@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const schema = require('../../config/schema')
 
 const {signUp,
         signIn} = require('./service.auth')
@@ -7,7 +8,9 @@ const {signUp,
 const {validateUsername,
         validateEmail,
         validatePassword,
-        validateName} = require('./middleware.auth')
+        validateName,
+        authSchemaValidator} = require('./middleware.auth');
+const Joi = require('joi');
 
 
 router.post('/signIn', async (req,res) => {
@@ -33,7 +36,9 @@ router.post('/signUp', validateUsername, validateEmail, validatePassword, valida
 
     try {
         const { fullName, username, email, password } = req.body;
-
+        
+        const {error, usernamevalidate} = schema.validate({ username})
+        console.log()
         const responseSignUp = await signUp({ fullName, username, email, password })
 
  
@@ -49,5 +54,27 @@ router.post('/signUp', validateUsername, validateEmail, validatePassword, valida
 
 });
     
+router.post('/signUpTests', authSchemaValidator, async (req,res) => {
+
+    try {
+        const { fullName, username, email, password } = req.body;
+        
+        const {error, value: usernameValidado} = schema.validate({username})
+        console.log(error, usernameValidado)
+
+        if (error){
+            return res.status(400).json({message:error.details[0].message})
+        }
+
+        return res.status(200).json(usernameValidado)
+    } catch (error) {
+        return res.status(500).json(error.message)
+    }
+        
+
+        
+
+
+});
 
 module.exports = router;
