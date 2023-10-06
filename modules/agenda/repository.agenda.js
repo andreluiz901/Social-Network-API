@@ -5,7 +5,7 @@ async function createNewPost(messagePost, dateCreated, ownerId) {
     const responseQuery = await clientDatabase.query(
         'INSERT INTO public.posts (date_created, date_last_update, message, id_creator) VALUES ($1, $1, $2, $3) RETURNING id',[dateCreated, messagePost, ownerId])
     await disconnectDatabase(clientDatabase)
-    return {id:responseQuery.rows[0].id, messagePost, dateCreated}
+    return {id:responseQuery.rows[0].id, message_post: messagePost, date_created: dateCreated}
 }
 
 async function getPostAgendaPageLimit(offset, limit) {
