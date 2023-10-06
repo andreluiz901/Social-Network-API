@@ -9,7 +9,7 @@ const {validateUsername,
         validateEmail,
         validatePassword,
         validateName,
-        authSchemaValidator} = require('./middleware.auth');
+        signUpSchemaValidator} = require('./middleware.auth');
 const Joi = require('joi');
 
 
@@ -32,16 +32,13 @@ router.post('/signIn', async (req,res) => {
 });
 
 
-router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, async (req,res) => {
+router.post('/signUp', signUpSchemaValidator, async (req,res) => {
 
     try {
         const { fullName, username, email, password } = req.body;
-        
-        const {error, usernamevalidate} = schema.validate({ username})
-        console.log()
-        const responseSignUp = await signUp({ fullName, username, email, password })
 
- 
+        const responseSignUp = await signUp({ fullName, username, email, password })
+        
         if (responseSignUp) {
             return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
         }
@@ -53,28 +50,6 @@ router.post('/signUp', validateUsername, validateEmail, validatePassword, valida
     }
 
 });
-    
-router.post('/signUpTests', authSchemaValidator, async (req,res) => {
 
-    try {
-        const { fullName, username, email, password } = req.body;
-        
-        const {error, value: usernameValidado} = schema.validate({username})
-        console.log(error, usernameValidado)
-
-        if (error){
-            return res.status(400).json({message:error.details[0].message})
-        }
-
-        return res.status(200).json(usernameValidado)
-    } catch (error) {
-        return res.status(500).json(error.message)
-    }
-        
-
-        
-
-
-});
 
 module.exports = router;
