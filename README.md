@@ -123,11 +123,69 @@ Uma versão atualizada da api está disponível para ser consultada por frontend
 
 ### Visão Geral das Rotas
 
-Antes de adentrar em cada rota, abaixo segue um esquema das rotas funcionais e atuais da API:
+
+#### Exemplos req/res das rotas
+
+Cada rota envia determinados dados na requisição **(req)** através do body, que podem ser diferentes para cada rota. 
+
+```
+// req example
+
+{
+   "username":"foobar",
+   "fullname":"foo bar",
+   "password":"foobar@987"
+}
+```
+
+Por outro lado, as respostas **(res)** seguem o seguinte modelo geral:
+
+```
+// res example
+
+{
+   "data":{
+      // payload
+   },
+   "message":"Mensagem de sucesso ou erro"
+}
+```
+
+Abaixo segue uma descrição das rotas funcionais e atuais da API:
  
 **auth**
 
 - **[POST]** *'/auth/signIn* : Realiza o acesso de um usuário no sistema através de username e password no body da requisição. Cria um token JWT para o usuário utilizar durante sua sessão.
+
+    ```
+    // req example
+
+    {
+    "fullName":"foo bar",
+    "username":"fooBar",
+    "password":"foo@123456",
+    "confirmPassword": "foo@123456",
+    "email":"foo@bar.com"
+    }
+    ```
+
+    Por outro lado, as respostas **(res)** seguem o seguinte modelo geral:
+
+    ```
+    // res example
+
+    {
+    "data": {
+        "id": 71,
+        "fullName": "foo bar",
+        "username": "fooBar",
+        "email": "foo@bar.com"
+    },
+    "message": "Usuario cadastrado com sucesso"
+    }
+    ```
+
+
 - **[POST]** *'/auth/signUp* : Permite o cadastro de um usuário no sistema. Necessário informar fullName, username, email, password através do body da requisição. A Senha é encriptada antes de ser adicionada no banco de dados.
 
 **agenda**
