@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const schema = require('../../config/schema')
 
 const {signUp,
         signIn} = require('./service.auth')
@@ -7,7 +8,9 @@ const {signUp,
 const {validateUsername,
         validateEmail,
         validatePassword,
-        validateName} = require('./middleware.auth')
+        validateName,
+        signUpSchemaValidator} = require('./middleware.auth');
+const Joi = require('joi');
 
 
 router.post('/signIn', async (req,res) => {
@@ -29,14 +32,13 @@ router.post('/signIn', async (req,res) => {
 });
 
 
-router.post('/signUp', validateUsername, validateEmail, validatePassword, validateName, async (req,res) => {
+router.post('/signUp', signUpSchemaValidator, async (req,res) => {
 
     try {
         const { fullName, username, email, password } = req.body;
 
         const responseSignUp = await signUp({ fullName, username, email, password })
-
- 
+        
         if (responseSignUp) {
             return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
         }
@@ -48,6 +50,6 @@ router.post('/signUp', validateUsername, validateEmail, validatePassword, valida
     }
 
 });
-    
+
 
 module.exports = router;
