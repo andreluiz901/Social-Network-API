@@ -5,15 +5,12 @@ const schema = require('../../config/schema')
 const {signUp,
         signIn} = require('./service.auth')
 
-const {validateUsername,
-        validateEmail,
-        validatePassword,
-        validateName,
+const {signInSchemaValidator,
         signUpSchemaValidator} = require('./middleware.auth');
 const Joi = require('joi');
 
 
-router.post('/signIn', async (req,res) => {
+router.post('/signIn', signInSchemaValidator, async (req,res) => {
    try {
     const { username, password } = req.body;
     const isSigInSuccefully = await signIn({username, password})

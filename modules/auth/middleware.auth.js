@@ -15,7 +15,25 @@ function isNotEmpty(req) {
 
 function signUpSchemaValidator(req, res, next) {
 
-    const { error, value: data } = schemas.authSchema.validate(req.body, schemas.validateOptions)
+    const { error, value: data } = schemas.signUpSchema.validate(req.body, schemas.validateOptions)
+    
+    if (error) {
+        const joiError = {
+            errors: error.details.map(( {message, type, path} ) => {
+                return {message:message.replace(/['"\"']/g,''),
+                        field: path[0],
+                        type}   //just to see type, need to remove after get all error messages patterns
+            })
+        }
+        return res.status(400).json(joiError)
+    }
+
+    next()
+}
+
+function signInSchemaValidator(req, res, next) {
+
+    const { error, value: data } = schemas.signInSchema.validate(req.body, schemas.validateOptions)
     
     if (error) {
         const joiError = {
@@ -123,5 +141,6 @@ module.exports = {
     validateName,
     isNotEmpty,
     authorization,
-    signUpSchemaValidator
+    signUpSchemaValidator,
+    signInSchemaValidator
 }

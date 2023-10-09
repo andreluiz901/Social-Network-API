@@ -14,7 +14,7 @@ const validateOptions = {
     }
 }
 
-const authSchema = Joi.object({
+const signUpSchema = Joi.object({
     username: Joi.string().alphanum().min(4).max(25).required(),
     fullName:Joi.string().pattern((/^[a-z][A-Z]+ [a-z][A-Z]+$/i)).required(), 
     email:Joi.string().email({ minDomainSegments:2 }).required(), 
@@ -22,4 +22,9 @@ const authSchema = Joi.object({
     confirmPassword:Joi.ref('password')
 }).with('password', 'confirmPassword')
 
-module.exports = {authSchema, validateOptions}
+const signInSchema = Joi.object({
+    username: Joi.string().alphanum().min(4).max(25).required(),
+    password:Joi.string().required(),
+})
+
+module.exports = {signInSchema, signUpSchema, validateOptions}
