@@ -32,7 +32,7 @@ router.post('/signIn', signInSchemaValidator, async (req,res) => {
 router.post('/signUp', signUpSchemaValidator, async (req,res) => {
 
     try {
-        const { fullName, username, email, password } = req.body;
+        const { fullName, username, email, password, profile_photo } = req.body;
 
         const responseSignUp = await signUp({ fullName, username, email, password })
         
