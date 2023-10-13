@@ -26,7 +26,7 @@ async function signIn({username, password}){
 
         
         return {access_token: token,
-                data:{fullName:foundUser[0].fullName, username:foundUser[0].username, email:foundUser[0].email},}
+                data:{id:foundUser[0].id, fullName:foundUser[0].fullName, username:foundUser[0].username, email:foundUser[0].email},}
 
         }
         
