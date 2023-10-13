@@ -48,6 +48,14 @@ async function create({fullName, username, password, email}) {
     return {id:responseQuery.rows[0].id, fullName, username, email}
 }
 
+async function v2Create({fullName, username, password, email}) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query(
+        'INSERT INTO public.users ("fullName", username, password, email) VALUES ($1, $2, $3, $4) RETURNING id', [fullName, username, password, email])
+    await disconnectDatabase(clientDatabase)
+    return {id:responseQuery.rows[0].id, fullName, username, email}
+}
+
 async function update({id, name, username, email}) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
@@ -65,4 +73,12 @@ async function remove({id}) {
     return responseQuery
 }
 
-module.exports = {userExistbyUsernameOrEmail, findUserByUsername, findUserByEmail, findUserById, findAllUsers, create, update, remove};
+module.exports = {userExistbyUsernameOrEmail, 
+                findUserByUsername, 
+                findUserByEmail, 
+                findUserById, 
+                findAllUsers, 
+                create,
+                v2Create,
+                update, 
+                remove};

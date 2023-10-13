@@ -8,6 +8,11 @@ async function createNewUser({ fullName, username, password, email }) {
     const newUser = await userRepository.create({fullName, username, password, email})
     return newUser
 }
+
+async function v2CreateNewUser({ fullName, username, password, email, hashedPhotoName }) {        
+    const newUser = await userRepository.v2Create({fullName, username, password, email, hashedPhotoName})
+    return newUser
+}
  
 function findUserByUsername(username) {
     return userRepository.find((user) => user.username === username) || false;
@@ -64,4 +69,5 @@ module.exports = {
                 updateUser, 
                 findIndexUserById, 
                 deleteUser, 
-                validateName}
+                validateName,
+                v2CreateNewUser}
