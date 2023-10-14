@@ -72,16 +72,15 @@ async function v2SignUp({fullName, username, email, password, profile_photo}) {
     if (existingUser){
         return false
     }
-    
+    const hashedPhotoName = encryptProfilePhotoName(profile_photo.originalname);
     const hashedPassword = encryptPassword(password);
     
-    if(profile_photo){
-        const hashedPhotoName = encryptProfilePhotoName(profile_photo.originalname);
 
-        const arquivo = await uploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
+    if(profile_photo){
         
         const userCreated = await v2CreateNewUser({fullName, username, email, password:hashedPassword, hashedPhotoName});
-        
+        const arquivo = await uploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
+
         return {...userCreated, 
                 profile_photo: arquivo.Location}
     }
