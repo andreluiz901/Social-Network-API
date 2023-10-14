@@ -8,6 +8,11 @@ async function createNewUser({ fullName, username, password, email }) {
     const newUser = await userRepository.create({fullName, username, password, email})
     return newUser
 }
+
+async function v2CreateNewUser({ fullName, username, password, email, hashedPhotoName }) {        
+    const newUser = await userRepository.v2Create({fullName, username, password, email, hashedPhotoName})
+    return newUser
+}
  
 function findUserByUsername(username) {
     return userRepository.find((user) => user.username === username) || false;
@@ -34,11 +39,6 @@ async function updateUser (id, {name, username, email}) {
     },{}) 
     await userRepository.update(userUpdated)
     return userUpdated
-    // só pode editar se o ID existir, senão ele vai criar um novo (checar com o findById)
-    // findById --> Info do User
-        // Se entrar, user existe
-        // Só atualiza o que for diff
-        // reduce() no object.keys e retorna um novo objeto
 }
 
 function deleteUser (id) {
@@ -64,4 +64,5 @@ module.exports = {
                 updateUser, 
                 findIndexUserById, 
                 deleteUser, 
-                validateName}
+                validateName,
+                v2CreateNewUser}

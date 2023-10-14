@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const sizeOf = require('image-size')
 const secret = require('../../config/token');
 const schemas = require('../../config/schema')
 const mailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -16,8 +17,9 @@ function isNotEmpty(req) {
 function signUpSchemaValidator(req, res, next) {
 
     const { error, value: data } = schemas.signUpSchema.validate(req.body, schemas.validateOptions)
-    
-    if (error) {
+    const { error:profilePhotoError, value: profilePhotoData } = schemas.profilePhotoSchema.validate(req.file, schemas.validateOptions)
+
+    if (error){
         const joiError = {
             errors: error.details.map(( {message, type, path} ) => {
                 return {message:message.replace(/['"\"']/g,''),
@@ -26,6 +28,25 @@ function signUpSchemaValidator(req, res, next) {
             })
         }
         return res.status(400).json(joiError)
+    }
+
+    if (profilePhotoError){
+        const joiError = {
+            errors: profilePhotoError.details.map(( {message, type, path} ) => {
+                return {message:message.replace(/['"\"']/g,''),
+                        field: path[0],
+                        type}   //just to see type, need to remove after get all error messages patterns
+            })
+        }
+        return res.status(400).json(joiError)
+    }
+
+    if (profilePhotoData){
+        const sizeImage = sizeOf(profilePhotoData.buffer)
+    
+        if (sizeImage.heigth > 500 || sizeImage.width > 500){
+        return res.status(400).json({message:'please input a correct resolution image'})
+        }
     }
 
     next()
