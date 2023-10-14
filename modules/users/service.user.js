@@ -39,11 +39,6 @@ async function updateUser (id, {name, username, email}) {
     },{}) 
     await userRepository.update(userUpdated)
     return userUpdated
-    // só pode editar se o ID existir, senão ele vai criar um novo (checar com o findById)
-    // findById --> Info do User
-        // Se entrar, user existe
-        // Só atualiza o que for diff
-        // reduce() no object.keys e retorna um novo objeto
 }
 
 function deleteUser (id) {

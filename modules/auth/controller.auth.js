@@ -49,24 +49,25 @@ router.post('/signUp', signUpSchemaValidator, multer.single('profile_photo'), as
 });
 
 
-//router.post('v2/signUp', multer.single('profile_photo'),  signUpSchemaValidator, async (req,res) => {
+router.post('/v2/signUp', multer.single('profile_photo'),  signUpSchemaValidator, async (req,res) => {
     
     try {
         const { fullName, username, email, password } = req.body;
         const profile_photo = req.file;
         
         const responseSignUp = await v2SignUp({ fullName, username, email, password, profile_photo })
-        
-        if (responseSignUp) {
-            return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
+
+        if (!responseSignUp){
+            return res.status(400).json({ message: 'Não foi possível cadastrar o usuário, favor verifique se as informações foram preenchidas corretamente'}) 
         }
  
-        res.status(400).json({ message: 'Não foi possível cadastrar o usuário, favor verifique se as informações estão corretas'}) 
+        return res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'Ocorreu um erro inesperado do servidor' })
     }
 
-//});
+});
 
 module.exports = router;
