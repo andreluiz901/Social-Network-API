@@ -26,7 +26,7 @@ server.use(cors({ "origin": "*",
   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
   "preflightContinue": true,
   "optionsSuccessStatus": 204,
-  "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+  "Access-Control-Allow-Headers": "*", //Content-Type, api_key, Authorization",
   "Access-Control-Allow-Methods":"*",
   "Access-Control-Allow-Origin": "*"},
   ));
