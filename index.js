@@ -10,7 +10,7 @@ server.use(express.json());
 const port = process.env.SERVER_PORT
 const cors = require('cors')
 
-server.use(cors())
+//server.use(cors())
 
 // const corsOpts = {
   
@@ -22,10 +22,14 @@ server.use(cors())
 //     ]
 // };
   
-// server.use(cors({ "origin": "*",
-// "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-// "preflightContinue": true,
-// "optionsSuccessStatus": 204}));
+server.use(cors({ "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": true,
+  "optionsSuccessStatus": 204,
+  "Access-Control-Allow-Headers": "Content-Type, api_key, Authorization",
+  "Access-Control-Allow-Methods":"*",
+  "Access-Control-Allow-Origin": "*"},
+  ));
 
 
 server.use('/users', userController);
