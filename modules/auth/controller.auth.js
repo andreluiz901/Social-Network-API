@@ -12,7 +12,7 @@ const {signInSchemaValidator,
 router.post('/signIn', signInSchemaValidator, async (req,res) => {
    try {
     const { username, password } = req.body;
-    console.log(username, password)
+    
     const isSigInSuccefully = await signIn({username, password})
  
     if(isSigInSuccefully){
