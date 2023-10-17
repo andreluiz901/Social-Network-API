@@ -4,6 +4,7 @@ const {userExistbyUsernameOrEmail, findUserByEmail, findUserByUsername} = requir
 const jwt = require('jsonwebtoken');
 const secret = require('../../config/token');
 const { s3 } = require('../../config/s3');
+const { PutObjectCommand } = require('@aws-sdk/client-s3');
 
 
 function encryptPassword(password) {
@@ -21,6 +22,19 @@ async function uploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuffe
         Body: profilePhotoBuffer,
         ContentType: profilePhotoMimetype
     }).promise()
+
+    return uploadProfilePhoto
+}
+
+async function v2UploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuffer, profilePhotoMimetype){
+    const params = {
+        Bucket: process.env.BACKBLAZE_BUCKET,
+        Key: `${process.env.UPLOAD_PHOTO_URL1}${userId}${process.env.UPLOAD_PHOTO_URL2}${hashedPhotoName}`,
+        Body: profilePhotoBuffer,
+        ContentType: profilePhotoMimetype
+    }
+    
+    const uploadProfilePhoto =  await s3.send(new PutObjectCommand(params)) //.promise()
 
     return uploadProfilePhoto
 }
@@ -72,19 +86,21 @@ async function v2SignUp({fullName, username, email, password, profile_photo}) {
     if (existingUser){
         return false
     }
-    const hashedPhotoName = encryptProfilePhotoName(profile_photo.originalname);
+
     const hashedPassword = encryptPassword(password);
     
 
     if(profile_photo){
         
+        const hashedPhotoName = encryptProfilePhotoName(profile_photo.originalname);
         const userCreated = await v2CreateNewUser({fullName, username, email, password:hashedPassword, hashedPhotoName});
-        const arquivo = await uploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
+        const arquivo = await v2UploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
 
         return {...userCreated, 
                 profile_photo: arquivo.Location}
     }
 
+    const hashedPhotoName = null;
     const userCreated = await v2CreateNewUser({fullName, username, email, password:hashedPassword, hashedPhotoName});
     
     return userCreated
