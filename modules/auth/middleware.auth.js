@@ -21,10 +21,9 @@ function signUpSchemaValidator(req, res, next) {
 
     if (error){
         const joiError = {
-            errors: error.details.map(( {message, type, path} ) => {
+            errors: error.details.map(( {message, path} ) => {
                 return {message:message.replace(/['"\"']/g,''),
-                        field: path[0],
-                        type}   //just to see type, need to remove after get all error messages patterns
+                        field: path[0]}
             })
         }
         return res.status(400).json(joiError)
@@ -32,10 +31,9 @@ function signUpSchemaValidator(req, res, next) {
 
     if (profilePhotoError){
         const joiError = {
-            errors: profilePhotoError.details.map(( {message, type, path} ) => {
+            errors: profilePhotoError.details.map(( {message, path} ) => {
                 return {message:message.replace(/['"\"']/g,''),
-                        field: path[0],
-                        type}   //just to see type, need to remove after get all error messages patterns
+                        field: path[0]}
             })
         }
         return res.status(400).json(joiError)
@@ -43,9 +41,9 @@ function signUpSchemaValidator(req, res, next) {
 
     if (profilePhotoData){
         const sizeImage = sizeOf(profilePhotoData.buffer)
-    
+        
         if (sizeImage.heigth > 500 || sizeImage.width > 500){
-        return res.status(400).json({message:'please input a correct resolution image'})
+        return res.status(400).json({message:'please input a correct resolution image (max size: 500 x 500)'})
         }
     }
 

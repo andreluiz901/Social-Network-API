@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const secret = require('../../config/token');
 const { s3 } = require('../../config/s3');
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
-
+const v2 = require('../../config/cloudinary');
+let streamifier = require('streamifier');
 
 function encryptPassword(password) {
     return encryptString(password)
@@ -22,7 +23,7 @@ async function uploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuffe
         Body: profilePhotoBuffer,
         ContentType: profilePhotoMimetype
     }).promise()
-
+    
     return uploadProfilePhoto
 }
 
@@ -36,6 +37,43 @@ async function v2UploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuf
     
     const uploadProfilePhoto =  await s3.send(new PutObjectCommand(params)) //.promise()
 
+    return uploadProfilePhoto
+}
+
+async function v3UploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuffer){
+    
+    let streamUpload = (userId, hashedPhotoName, profilePhotoBuffer) => {
+
+        return new Promise((resolve, reject) => {
+
+            const stream = v2.uploader.upload_stream({
+                public_id: hashedPhotoName,
+                folder: `${process.env.UPLOAD_PHOTO_URL1}${userId}`
+                },
+                (error, result) => {
+                    if (result) {
+                        resolve(result);
+                    } else {
+                        reject(error);
+                    }
+                });
+
+            streamifier.createReadStream(profilePhotoBuffer).pipe(stream)    
+        });
+    };
+      
+    async function uploadStreamprofilePhoto(userId, hashedPhotoName, profilePhotoBuffer) {
+      
+        const result = await streamUpload(userId, hashedPhotoName, profilePhotoBuffer);
+
+        return result
+      
+    }
+      
+    const uploadProfilePhoto = await uploadStreamprofilePhoto(userId, hashedPhotoName, profilePhotoBuffer);
+      
+    console.log('uploadProfilePhoto', uploadProfilePhoto)
+    
     return uploadProfilePhoto
 }
  
@@ -88,16 +126,15 @@ async function v2SignUp({fullName, username, email, password, profile_photo}) {
     }
 
     const hashedPassword = encryptPassword(password);
-    
 
     if(profile_photo){
         
         const hashedPhotoName = encryptProfilePhotoName(profile_photo.originalname);
         const userCreated = await v2CreateNewUser({fullName, username, email, password:hashedPassword, hashedPhotoName});
-        const arquivo = await v2UploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
+        const arquivo = await v3UploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
 
         return {...userCreated, 
-                profile_photo: arquivo.Location}
+                profile_photo: arquivo.secure_url}
     }
 
     const hashedPhotoName = null;

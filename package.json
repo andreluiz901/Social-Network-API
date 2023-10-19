@@ -28,7 +28,8 @@
     "multer": "^1.4.5-lts.1",
     "node-pre-gyp": "^0.17.0",
     "pg": "^8.11.1",
-    "pg-protocol": "^1.6.0"
+    "pg-protocol": "^1.6.0",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
