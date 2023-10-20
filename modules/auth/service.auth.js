@@ -71,12 +71,10 @@ async function v3UploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuf
     }
       
     const uploadProfilePhoto = await uploadStreamprofilePhoto(userId, hashedPhotoName, profilePhotoBuffer);
-      
-    console.log('uploadProfilePhoto', uploadProfilePhoto)
     
     return uploadProfilePhoto
 }
- 
+
 async function signIn({username, password}){
     
     const foundUser = await findUserByUsername(username);
@@ -91,14 +89,60 @@ async function signIn({username, password}){
                 secret, 
                 {expiresIn:'1h'}
             )
-
         
         return {access_token: token,
-                data:{id:foundUser[0].id, fullName:foundUser[0].fullName, username:foundUser[0].username, email:foundUser[0].email},}
+                data:{
+                    id:foundUser[0].id, 
+                    fullName:foundUser[0].fullName, 
+                    username:foundUser[0].username, 
+                    email:foundUser[0].email}
+                }
 
         }
         
     return isSigInSuccefully;
+    }
+
+    return null    
+}
+ 
+async function v2SignIn({username, password}){
+    
+    const foundUser = await findUserByUsername(username);
+    
+    if (foundUser) {
+        const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
+        if (isSigInSuccefully) {
+            delete foundUser[0].password
+
+            const token = await jwt.sign(
+                {data: foundUser},
+                secret, 
+                {expiresIn:'1h'}
+                )
+                 
+            if(foundUser[0].profile_photo){
+                return {
+                    access_token: token,
+                    data:{
+                        id:foundUser[0].id, 
+                        fullName:foundUser[0].fullName, 
+                        username:foundUser[0].username, 
+                        email:foundUser[0].email,
+                        profile_photo:`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1697764020${process.env.UPLOAD_PHOTO_URL1}${foundUser[0].id}/${foundUser[0].profile_photo}`
+                        }
+                    }
+                }
+
+            return {access_token: token,
+                data:{
+                    id:foundUser[0].id, 
+                    fullName:foundUser[0].fullName, 
+                    username:foundUser[0].username, 
+                    email:foundUser[0].email}
+                }
+        }
+        return isSigInSuccefully;
     }
 
     return null    
@@ -147,4 +191,5 @@ module.exports = {
                 encryptPassword, 
                 signUp,
                 signIn,
-                v2SignUp}
+                v2SignUp,
+                v2SignIn}
