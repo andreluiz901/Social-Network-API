@@ -31,19 +31,19 @@ router.post('/signIn', signInSchemaValidator, async (req,res) => {
 
 router.post('/v2/signIn', signInSchemaValidator, async (req,res) => {
     try {
-     const { username, password } = req.body;
+        const { username, password } = req.body;
  
-     const isSigInSuccefully = await v2SignIn({username, password})
+        const isSigInSuccefully = await v2SignIn({username, password})
   
-     if(isSigInSuccefully){
-         res.status(200).json(isSigInSuccefully)
-         return 
-     }
-     res.status(401).json({ message: "Credenciais Inválidas"})
+        if(isSigInSuccefully){
+            res.status(200).json(isSigInSuccefully)
+            return 
+        }
+        res.status(401).json({ message: "Credenciais Inválidas"})
      
     } catch (error) {
-     console.log(error.message)
-     res.status(500).json({ message: "Ocorreu um erro inesperado no servidor"})
+        console.log(error.message)
+        res.status(500).json({ message: "Ocorreu um erro inesperado no servidor"})
     }
      
  });

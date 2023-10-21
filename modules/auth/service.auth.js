@@ -1,4 +1,4 @@
-const {createNewUser, v2CreateNewUser, insertProfileById} = require('../users/service.user'); 
+const {createNewUser, v2CreateNewUser} = require('../users/service.user'); 
 const {encryptString,compareCryptString} = require('../../utils/cryptstring');
 const {userExistbyUsernameOrEmail, findUserByEmail, findUserByUsername} = require('../users/repository.user');
 const jwt = require('jsonwebtoken');

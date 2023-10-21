@@ -124,6 +124,7 @@ function validatePassword(req, res, next) {
 
 function authorization(req, res, next) {
     try {
+        
         let headerToken = req.headers["authorization"];
 
         const bearerToken = headerToken.split(' ')
@@ -142,7 +143,7 @@ function authorization(req, res, next) {
                     message: "Usuário sem autorização"
                 });
             }
-
+            
             req.userId = decoded.data[0].id;
             next();
         });

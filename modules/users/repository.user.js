@@ -29,6 +29,7 @@ async function findUserById(id) {
     const userFoundedById = await clientDatabase.query(
         'SELECT * FROM public.users WHERE id=$1 LIMIT 1', [id])
     await disconnectDatabase(clientDatabase) 
+    delete userFoundedById.rows[0].password
     return userFoundedById.rows[0]
 }
 
@@ -57,13 +58,14 @@ async function v2Create({fullName, username, password, email, hashedPhotoName}) 
     return {id:responseQuery.rows[0].id, fullName, username, email}
 }
 
-async function update({id, name, username, email}) {
+async function update({id, fullName, username, email, profile_photo}) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'UPDATE public.users SET name=$1, username=$2, email=$3 WHERE id=$4', 
-        [name, username, email, id])
+        'UPDATE public.users SET "fullName"=$1, username=$2, email=$3, profile_photo=$4 WHERE id=$5 returning *', 
+        [fullName, username, email, profile_photo, id])
     await disconnectDatabase(clientDatabase)
-    return responseQuery.rows
+    delete responseQuery.rows[0].password
+    return responseQuery.rows[0]
 }
 
 async function remove({id}) {

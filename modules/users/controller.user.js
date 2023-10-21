@@ -1,5 +1,6 @@
 const express = require('express');
 const userRouter = express.Router();
+const multer = require('../../config/multer')
 const { gettAllUsers, 
         createNewUser,
         updateUser,
@@ -23,12 +24,23 @@ userRouter.post('/', authorization, validateName, async (req, res) => {
     res.status(201).json({ data:newInstanceUser, message: "Usuário criado com sucesso!"})
 });
   
-userRouter.put('/:id?', authorization, async (req, res) => {
+userRouter.put('/', authorization, async (req, res) => {
     try {
         const idUserUpdate = req.params.id
         const userUpdated = await updateUser(idUserUpdate, req.body)
         res.status(201).json({data:userUpdated, message: "Usuário editado com sucesso!"})
-    } catch (error) {  
+    } catch (error) {
+        console.log(error.message)  
+        res.status(500).json({  message: "Ocorreu um problema de servidor!"})
+    } 
+});
+
+userRouter.put('/v2', multer.single('profile_photo'), authorization, async (req, res) => {
+    try {
+        const userUpdated = await updateUser(req.userId, {...req.body}, req.file)
+        res.status(201).json({data:userUpdated, message: "Usuário editado com sucesso!"})
+    } catch (error) {
+        console.log(error)  
         res.status(500).json({  message: "Ocorreu um problema de servidor!"})
     } 
 });
