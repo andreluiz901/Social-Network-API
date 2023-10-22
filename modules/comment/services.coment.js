@@ -37,4 +37,9 @@ async function deleteAgendaComment(ownerIdComment, idComment){
     }
 }
 
-module.exports = {createNewAgendaComment, readAgendaComment, deleteAgendaComment}
+async function getCommentsPaginatedById(page, limit, idPost){
+    const offsetPage = (limit*page)-limit
+    return commentsRepository.getCommentsPageLimitById(offsetPage, limit, idPost)
+}
+
+module.exports = {createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById}

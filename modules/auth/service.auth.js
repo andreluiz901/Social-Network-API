@@ -75,15 +75,15 @@ async function v3UploadProfilePhotoUser(userId, hashedPhotoName, profilePhotoBuf
     return uploadProfilePhoto
 }
 
-async function signIn({username, password}){
+async function signIn(username, password){
     
     const foundUser = await findUserByUsername(username);
     
-    if (foundUser) {
+    if (foundUser.length > 0) {
         const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
         if (isSigInSuccefully) {
             delete foundUser[0].password
-
+            
             const token = await jwt.sign(
                 {data: foundUser},
                 secret, 
@@ -110,7 +110,7 @@ async function v2SignIn({username, password}){
     
     const foundUser = await findUserByUsername(username);
     
-    if (foundUser) {
+    if (foundUser.length > 0) {
         const isSigInSuccefully =  await compareCryptString(password, foundUser[0].password) 
         if (isSigInSuccefully) {
             delete foundUser[0].password

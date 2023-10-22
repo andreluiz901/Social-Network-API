@@ -1,7 +1,7 @@
 const express = require('express');
 const { authorization } = require('../auth/middleware.auth');
 const validateMessagePost = require('../agenda/middleware.agenda');
-const { createNewAgendaComment, readAgendaComment, deleteAgendaComment } = require('./services.coment');
+const { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById } = require('./services.coment');
 const router = express.Router();
 
 
@@ -38,6 +38,21 @@ router.delete('/:id?', authorization, async (req,res) => {
         console.log(error)
         res.status(500).json({message:error.message})
     }
+})
+
+router.get('/post/:id?', authorization, async(req, res) => {
+    try {
+        const idPost = req.params.id
+        const {page, limit} = req.query
+        const responsePostPage = await getCommentsPaginatedById(page, limit, idPost)
+        res.status(200).json(
+                {data: responsePostPage.data, 
+                page:parseInt(page), 
+                limit: parseInt(limit), 
+                count:parseInt(responsePostPage.count)})
+    } catch (error) {
+        res.status(500).json({message:'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error})
+}
 })
 
 module.exports = router

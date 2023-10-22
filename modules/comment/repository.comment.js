@@ -75,6 +75,20 @@ async function deleteComment(idComment){
     return responseQuery
 }
 
+async function getCommentsPageLimitById(offset, limit, idPost){
+    const clientDatabase = await createConnectionDatabase();
+    const responseQuery = await clientDatabase.query(
+        'SELECT * FROM public.comments WHERE id_post = $3 ORDER BY date_created DESC LIMIT $1 OFFSET $2',
+        [limit, offset, idPost]
+    )
+    const totalRows = await clientDatabase.query(
+        'SELECT COUNT(id) FROM public.comments where id_post=$1',
+        [idPost]
+    )
+    await disconnectDatabase(clientDatabase)
+    return {count:totalRows.rows[0].count, data:responseQuery.rows}
+}
+
 module.exports = {createNewComment, 
                 checkPostExist, 
                 checkOwnerPost, 
@@ -82,4 +96,5 @@ module.exports = {createNewComment,
                 readUnreadComment, 
                 deleteComment,
                 getPostOwnerIdByIdComment,
-                getIdOwnerCommentByCommentId}
+                getIdOwnerCommentByCommentId,
+                getCommentsPageLimitById}

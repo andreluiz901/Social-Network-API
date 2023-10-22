@@ -12,14 +12,16 @@ const {signInSchemaValidator,
 
 router.post('/signIn', signInSchemaValidator, async (req,res) => {
    try {
+    
     const { username, password } = req.body;
-
-    const isSigInSuccefully = await signIn({username, password})
+    console.log(password)
+    const isSigInSuccefully = await signIn(username, password)
  
     if(isSigInSuccefully){
         res.status(200).json(isSigInSuccefully)
         return 
     }
+    
     res.status(401).json({ message: "Credenciais Inválidas"})
     
    } catch (error) {
