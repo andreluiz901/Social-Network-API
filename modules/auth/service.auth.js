@@ -151,6 +151,7 @@ async function v2SignIn({username, password}){
 async function signUp({fullName, username, email, password}) {
 
     const existingUser = await userExistbyUsernameOrEmail(username, email);
+
     if (existingUser) {
         return false
     }

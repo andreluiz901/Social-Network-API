@@ -15,15 +15,16 @@ const validateOptions = {
 
 const signUpSchema = Joi.object({
     username: Joi.string().alphanum().min(4).max(25).required(),
-    fullName:Joi.string().pattern((/^[a-z][A-Z]+ [a-z][A-Z]+$/i)).required(), 
+    fullName:Joi.string().trim().strict().required(), 
     email:Joi.string().email({ minDomainSegments:2 }).required(), 
     password:Joi.string().pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-=_+{}[\]|;:",.<>/?]).{6,20}$/)
         .required()
         .messages({
-        'any.only':'Passwords do not match.'
+        'string.pattern.base': "Field Password must contain betwwen 8 to 20 characters (minimal 1 uppercase, 1 special and 1 numerical character) "
     }),
     confirmPassword:Joi.ref('password')
-}).with('password', 'confirmPassword')
+}).with('password', 'confirmPassword').messages({
+    'any.only':'Passwords do not match.'})
 
 const profilePhotoSchema = Joi.object({
         fieldname: Joi.string(),

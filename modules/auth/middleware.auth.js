@@ -21,7 +21,8 @@ function signUpSchemaValidator(req, res, next) {
 
     if (error){
         const joiError = {
-            errors: error.details.map(( {message, path} ) => {
+            errors: error.details.map(( {message, path, type} ) => {
+                console.log(type)
                 return {message:message.replace(/['"\"']/g,''),
                         field: path[0]}
             })

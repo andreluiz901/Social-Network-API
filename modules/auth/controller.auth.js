@@ -50,19 +50,18 @@ router.post('/v2/signIn', signInSchemaValidator, async (req,res) => {
      
  });
 
-router.post('/signUp', signUpSchemaValidator, multer.single('profile_photo'), async (req,res) => {
+router.post('/signUp', signUpSchemaValidator, async (req,res) => {
 
     try {
         const { fullName, username, email, password } = req.body;
-        const { filename, mimetype, size, path:filepath } = req.file;
         
         const responseSignUp = await signUp({ fullName, username, email, password })
         
         if (responseSignUp) {
-            return  res.status(200).json({ data: responseSignUp, message: 'Usuario cadastrado com sucesso'});;
+            return  res.status(200).json({ data: responseSignUp, message: 'user successfully registered'});;
         }
  
-        res.status(400).json({ message: 'Não foi possível cadastrar o usuário, favor verifique se as informações estão corretas'}) 
+        res.status(400).json({ message: 'Unable to register the user, the email or username entered is already in use'}) 
 
     } catch (error) {
         res.status(500).json({ message: 'Ocorreu um erro inesperado do servidor' })
