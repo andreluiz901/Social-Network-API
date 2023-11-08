@@ -27,7 +27,10 @@ function signUpSchemaValidator(req, res, next) {
                         field: path[0]}
             })
         }
-        return res.status(400).json(joiError)
+        return res.status(400)
+                .json({data:joiError,
+                        message:'Some fields were filled out incorrectly.'
+                    })
     }
 
     if (profilePhotoError){
