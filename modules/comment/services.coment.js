@@ -3,7 +3,7 @@ const commentsRepository = require('./repository.comment')
 
 
 async function createNewAgendaComment(ownerIdComment, agendaPayload) {
-    const {message, postId} = agendaPayload
+    const { message, postId } = agendaPayload
     const dateNow = getNowDate()
     if (await commentsRepository.checkPostExist(postId)) {
         const newCommentCreated = await commentsRepository.createNewComment(message, dateNow, ownerIdComment, postId)
@@ -14,32 +14,50 @@ async function createNewAgendaComment(ownerIdComment, agendaPayload) {
 }
 
 async function readAgendaComment(idUserLogado, idComment) {
-    
+
     const idOwnerPostbyCommentId = await commentsRepository.getPostOwnerIdByIdComment(idComment)
 
-    if (idUserLogado === idOwnerPostbyCommentId){
+    if (idUserLogado === idOwnerPostbyCommentId) {
         const switchReadUnreadComment = await commentsRepository.readUnreadComment(idComment)
-        return { is_read: switchReadUnreadComment}
+        return { is_read: switchReadUnreadComment }
     } else {
         throw new Error("Não foi possível marcar a leitura do comentário")
     }
 }
 
-async function deleteAgendaComment(ownerIdComment, idComment){
+async function deleteAgendaComment(ownerIdComment, idComment) {
 
     const idOwnerCommentByCommentId = await commentsRepository.getIdOwnerCommentByCommentId(idComment)
 
-    if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId.id_owner){
-            const isCommentDeleted = await commentsRepository.deleteComment(idComment)
-            return isCommentDeleted.rows[0]
+    if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId.id_owner) {
+        const isCommentDeleted = await commentsRepository.deleteComment(idComment)
+        return isCommentDeleted.rows[0]
     } else {
         throw new Error("Não foi possível deletar o comentário")
     }
 }
 
-async function getCommentsPaginatedById(page, limit, idPost){
-    const offsetPage = (limit*page)-limit
+async function getCommentsPaginatedById(page, limit, idPost) {
+    const offsetPage = (limit * page) - limit
     return commentsRepository.getCommentsPageLimitById(offsetPage, limit, idPost)
 }
 
-module.exports = {createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById}
+async function editAgendaComment(ownerIdComment, idComment, messageComment) {
+    const dateNow = getNowDate()
+    if (await commentsRepository.checkPostExist(postId)) {
+        const idOwnerCommentByCommentId = await commentsRepository.getIdOwnerCommentByCommentId(idComment)
+        console.log(idOwnerCommentByCommentId)
+        if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId.id_owner) {
+            const commentEdited = await commentsRepository.editComment(messageComment, dateNow, ownerIdComment)
+            return commentEdited
+        } else {
+            throw new Error("Não foi possível deletar o comentário")
+        }
+
+
+    } else {
+        throw new Error("Não foi possível editar o comentário")
+    }
+}
+
+module.exports = { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById }

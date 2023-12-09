@@ -5,54 +5,71 @@ const { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getComme
 const router = express.Router();
 
 
-router.post('/', authorization, validateMessagePost, async(req, res) => {
+router.post('/', authorization, validateMessagePost, async (req, res) => {
     try {
         const ownerIdComment = req.userId
         const createdNewComment = await createNewAgendaComment(ownerIdComment, req.body)
-        res.status(201).json({data:createdNewComment, message:"Comentário realizado com sucesso"})
+        res.status(201).json({ data: createdNewComment, message: "Comentário realizado com sucesso" })
     } catch (error) {
-        res.status(500).json({message:error.message})
+        res.status(500).json({ message: error.message })
     }
 })
 
-router.patch('/read/:id?', authorization, async(req, res) => {
-    try{
+router.patch('/read/:id?', authorization, async (req, res) => {
+    try {
         const idUserLogado = req.userId
         const idComment = req.params.id
-        
+
         const readComment = await readAgendaComment(idUserLogado, idComment)
-        res.status(201).json({data:readComment, message:"Comentário marcado com sucesso"})
-    } catch (error){
+        res.status(201).json({ data: readComment, message: "Comentário marcado com sucesso" })
+    } catch (error) {
         console.log(error)
-        res.status(500).json({message:error.message})
+        res.status(500).json({ message: error.message })
     }
 })
 
-router.delete('/:id?', authorization, async (req,res) => {
+router.delete('/:id?', authorization, async (req, res) => {
     try {
         const idUserLogado = req.userId
         const idComment = req.params.id
         const deleteComment = await deleteAgendaComment(idUserLogado, idComment)
-        res.status(200).json({data:deleteComment, message:"Comentário excluído com sucesso"})
+        res.status(200).json({ data: deleteComment, message: "Comentário excluído com sucesso" })
     } catch (error) {
         console.log(error)
-        res.status(500).json({message:error.message})
+        res.status(500).json({ message: error.message })
     }
 })
 
-router.get('/post/:id?', authorization, async(req, res) => {
+router.get('/post/:id?', authorization, async (req, res) => {
     try {
         const idPost = req.params.id
-        const {page, limit} = req.query
+        const { page, limit } = req.query
         const responsePostPage = await getCommentsPaginatedById(page, limit, idPost)
         res.status(200).json(
-                {data: responsePostPage.data, 
-                page:parseInt(page), 
-                limit: parseInt(limit), 
-                count:parseInt(responsePostPage.count)})
+            {
+                data: responsePostPage.data,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                count: parseInt(responsePostPage.count)
+            })
     } catch (error) {
-        res.status(500).json({message:'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error})
-}
+        res.status(500).json({ message: 'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error })
+    }
 })
 
+router.put('/:idComment', async (req, res) => {
+    try {
+        const ownerIdComment = req.userId
+        const idComment = req.params.idcomment
+        const messageComment = req.body.message
+        const createdNewComment = await editAgendaComment(ownerIdComment, idComment, messageComment)
+        res.status(200).json(
+            {
+                data: response.data,
+                message: "Comentário realizado com sucesso"
+            })
+    } catch (error) {
+        res.status(500).json({ message: 'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error })
+    }
+})
 module.exports = router
