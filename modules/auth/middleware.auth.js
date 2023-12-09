@@ -17,37 +17,42 @@ function isNotEmpty(req) {
 function signUpSchemaValidator(req, res, next) {
 
     const { error, value: data } = schemas.signUpSchema.validate(req.body, schemas.validateOptions)
-    const { error:profilePhotoError, value: profilePhotoData } = schemas.profilePhotoSchema.validate(req.file, schemas.validateOptions)
+    const { error: profilePhotoError, value: profilePhotoData } = schemas.profilePhotoSchema.validate(req.file, schemas.validateOptions)
 
-    if (error){
+    if (error) {
         const joiError = {
-            errors: error.details.map(( {message, path, type} ) => {
+            errors: error.details.map(({ message, path, type }) => {
                 console.log(type)
-                return {message:message.replace(/['"\"']/g,''),
-                        field: path[0]}
+                return {
+                    message: message.replace(/['"\"']/g, ''),
+                    field: path[0]
+                }
             })
         }
         return res.status(400)
-                .json({data:joiError,
-                        message:'Some fields were filled out incorrectly.'
-                    })
+            .json({
+                data: joiError,
+                message: 'Some fields were filled out incorrectly.'
+            })
     }
 
-    if (profilePhotoError){
+    if (profilePhotoError) {
         const joiError = {
-            errors: profilePhotoError.details.map(( {message, path} ) => {
-                return {message:message.replace(/['"\"']/g,''),
-                        field: path[0]}
+            errors: profilePhotoError.details.map(({ message, path }) => {
+                return {
+                    message: message.replace(/['"\"']/g, ''),
+                    field: path[0]
+                }
             })
         }
         return res.status(400).json(joiError)
     }
 
-    if (profilePhotoData){
+    if (profilePhotoData) {
         const sizeImage = sizeOf(profilePhotoData.buffer)
-        
-        if (sizeImage.heigth > 500 || sizeImage.width > 500){
-        return res.status(400).json({message:'please input a correct resolution image (max size: 500 x 500)'})
+
+        if (sizeImage.heigth > 500 || sizeImage.width > 500) {
+            return res.status(400).json({ message: 'please input a correct resolution image (max size: 500 x 500)' })
         }
     }
 
@@ -57,13 +62,15 @@ function signUpSchemaValidator(req, res, next) {
 function signInSchemaValidator(req, res, next) {
 
     const { error, value: data } = schemas.signInSchema.validate(req.body, schemas.validateOptions)
-    
+
     if (error) {
         const joiError = {
-            errors: error.details.map(( {message, type, path} ) => {
-                return {message:message.replace(/['"\"']/g,''),
-                        field: path[0],
-                        type}   //just to see type, need to remove after get all error messages patterns
+            errors: error.details.map(({ message, type, path }) => {
+                return {
+                    message: message.replace(/['"\"']/g, ''),
+                    field: path[0],
+                    type
+                }   //just to see type, need to remove after get all error messages patterns
             })
         }
         return res.status(400).json(joiError)
@@ -128,7 +135,7 @@ function validatePassword(req, res, next) {
 
 function authorization(req, res, next) {
     try {
-        
+
         let headerToken = req.headers["authorization"];
 
         const bearerToken = headerToken.split(' ')
@@ -147,8 +154,9 @@ function authorization(req, res, next) {
                     message: "Usuário sem autorização"
                 });
             }
-            
+
             req.userId = decoded.data[0].id;
+
             next();
         });
     } catch (error) {

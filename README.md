@@ -199,6 +199,7 @@ Abaixo segue uma descrição das rotas funcionais e atuais da API:
 
 - **[POST]** *'/comment'* : Cria e registra o comentário de um usuário na postagem de outro usuário ou de sua própria autoria (necessita autorização JWT de usuário logado).
 - **[PATCH]** '*/comment/read/:id?*' : Permite que o dono e somente o dono da postagem marque os comentários como lidos/não lidos e registra esta única alteração no sistema (necessita autorização JWT de usuário logado).
+- **[PUT]** '*/comment/idComment*' : Permite que o dono e somente o dono do comentário edite o conteúdo da mensagem (necessita autorização JWT de usuário logado).
 
 **users**
 

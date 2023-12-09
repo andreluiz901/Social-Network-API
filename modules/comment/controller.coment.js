@@ -1,7 +1,7 @@
 const express = require('express');
 const { authorization } = require('../auth/middleware.auth');
 const validateMessagePost = require('../agenda/middleware.agenda');
-const { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById } = require('./services.coment');
+const { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById, editAgendaComment } = require('./services.coment');
 const router = express.Router();
 
 
@@ -57,19 +57,22 @@ router.get('/post/:id?', authorization, async (req, res) => {
     }
 })
 
-router.put('/:idComment', async (req, res) => {
+router.put('/:idComment', authorization, async (req, res) => {
     try {
         const ownerIdComment = req.userId
-        const idComment = req.params.idcomment
+        const idComment = req.params.idComment
         const messageComment = req.body.message
-        const createdNewComment = await editAgendaComment(ownerIdComment, idComment, messageComment)
-        res.status(200).json(
-            {
-                data: response.data,
-                message: "Comentário realizado com sucesso"
-            })
+        const editedNewComment = await editAgendaComment(ownerIdComment, idComment, messageComment)
+        res.status(200).json({
+            data: editedNewComment,
+            message: "Comentário realizado com sucesso"
+        })
     } catch (error) {
-        res.status(500).json({ message: 'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error })
+        console.log(error)
+        res.status(500).json({
+            message: 'ocorreu um erro no servidor, não foi possível atualizar o comentário',
+            error: error
+        })
     }
 })
 module.exports = router

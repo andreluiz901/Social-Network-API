@@ -44,20 +44,15 @@ async function getCommentsPaginatedById(page, limit, idPost) {
 
 async function editAgendaComment(ownerIdComment, idComment, messageComment) {
     const dateNow = getNowDate()
-    if (await commentsRepository.checkPostExist(postId)) {
-        const idOwnerCommentByCommentId = await commentsRepository.getIdOwnerCommentByCommentId(idComment)
-        console.log(idOwnerCommentByCommentId)
-        if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId.id_owner) {
-            const commentEdited = await commentsRepository.editComment(messageComment, dateNow, ownerIdComment)
-            return commentEdited
-        } else {
-            throw new Error("Não foi possível deletar o comentário")
-        }
 
+    const idOwnerCommentByCommentId = await commentsRepository.getIdOwnerCommentByCommentId(idComment)
 
+    if (ownerIdComment === idOwnerCommentByCommentId.id_owner) {
+        const commentEdited = await commentsRepository.editComment(messageComment, dateNow, idComment, ownerIdComment)
+        return commentEdited
     } else {
-        throw new Error("Não foi possível editar o comentário")
+        throw new Error("Não foi possível deletar o comentário")
     }
 }
 
-module.exports = { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById }
+module.exports = { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById, editAgendaComment }

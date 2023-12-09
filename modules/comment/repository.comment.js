@@ -91,18 +91,15 @@ async function getCommentsPageLimitById(offset, limit, idPost) {
     return { count: totalRows.rows[0].count, data: responseQuery.rows }
 }
 
-async function editComment(messageComment, dateNow) {
+async function editComment(messageComment, dateNow, idComment, ownerIdComment) {
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        'UPDATE public.comments SET date_last_update=$1 , message=$2) VALUES ($1, $2) RETURNING *',
-        [dateNow, messageComment])
+        'UPDATE public.comments SET date_last_update=$1, message=$2 WHERE id=$3 and id_owner=$4 RETURNING *',
+        [dateNow, messageComment, idComment, ownerIdComment])
     await disconnectDatabase(clientDatabase)
     return {
         id: responseQuery.rows[0].id,
-        message: messagePost,
-        date_created: dateCreated,
-        date_last_update: dateCreated,
-        id_post: postId
+        message: messageComment
     }
 }
 
