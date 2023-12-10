@@ -1,6 +1,6 @@
 const { createNewUser, v2CreateNewUser } = require('../users/service.user');
 const { encryptString, compareCryptString } = require('../../utils/cryptstring');
-const { userExistbyUsernameOrEmail, findUserByEmail, findUserByUsername } = require('../users/repository.user');
+const { userExistbyUsernameOrEmail, findUserByEmail, findUserByUsername, updateProfilePhoto } = require('../users/repository.user');
 const jwt = require('jsonwebtoken');
 const secret = require('../../config/token');
 const { s3 } = require('../../config/s3');
@@ -120,21 +120,22 @@ async function v2SignIn({ username, password }) {
             const token = await jwt.sign(
                 { data: foundUser },
                 secret,
-                { expiresIn: '1h' }
+                { expiresIn: '4h' }
             )
 
-            if (foundUser[0].profile_photo) {
-                return {
-                    access_token: token,
-                    data: {
-                        id: foundUser[0].id,
-                        fullName: foundUser[0].fullName,
-                        username: foundUser[0].username,
-                        email: foundUser[0].email,
-                        profile_photo: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1697764020${process.env.UPLOAD_PHOTO_URL1}${foundUser[0].id}/${foundUser[0].profile_photo}`
-                    }
-                }
-            }
+            // if (foundUser[0].profile_photo) {
+            //     return {
+            //         access_token: token,
+            //         data: {
+            //             id: foundUser[0].id,
+            //             fullName: foundUser[0].fullName,
+            //             username: foundUser[0].username,
+            //             email: foundUser[0].email,
+            //             profile_photo: foundUser[0].profile_photo
+            //             //profile_photo: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1697764020${process.env.UPLOAD_PHOTO_URL1}${foundUser[0].id}/${foundUser[0].profile_photo}`
+            //         }
+            //     }
+            // }
 
             return {
                 access_token: token,
@@ -142,7 +143,8 @@ async function v2SignIn({ username, password }) {
                     id: foundUser[0].id,
                     fullName: foundUser[0].fullName,
                     username: foundUser[0].username,
-                    email: foundUser[0].email
+                    email: foundUser[0].email,
+                    profile_photo: foundUser[0].profile_photo
                 }
             }
         }
@@ -181,17 +183,21 @@ async function v2SignUp({ fullName, username, email, password, profile_photo }) 
         const hashedPhotoName = encryptProfilePhotoName(profile_photo.originalname);
         const userCreated = await v2CreateNewUser({ fullName, username, email, password: hashedPassword, hashedPhotoName });
         const arquivo = await v3UploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
+        const profilePhotoUpdated = await updateProfilePhoto(arquivo.secure_url, userCreated.id)
 
         return {
             ...userCreated,
-            profile_photo: arquivo.secure_url
+            profile_photo: profilePhotoUpdated.profile_photo
         }
     }
 
     const hashedPhotoName = null;
     const userCreated = await v2CreateNewUser({ fullName, username, email, password: hashedPassword, hashedPhotoName });
 
-    return userCreated
+    return {
+        ...userCreated,
+        profile_photo: userCreated.profile_photo
+    }
 }
 
 module.exports = {

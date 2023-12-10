@@ -28,7 +28,7 @@ async function findUserById(id) {
     const clientDatabase = await createConnectionDatabase()
     const userFoundedById = await clientDatabase.query(
         'SELECT * FROM public.users WHERE id=$1 LIMIT 1', [id])
-    await disconnectDatabase(clientDatabase) 
+    await disconnectDatabase(clientDatabase)
     delete userFoundedById.rows[0].password
     return userFoundedById.rows[0]
 }
@@ -41,34 +41,34 @@ async function findAllUsers() {
     return responseQuery.rows
 }
 
-async function create({fullName, username, password, email}) {
+async function create({ fullName, username, password, email }) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
         'INSERT INTO public.users ("fullName", username, password, email) VALUES ($1, $2, $3, $4) RETURNING id', [fullName, username, password, email])
     await disconnectDatabase(clientDatabase)
-    return {id:responseQuery.rows[0].id, fullName, username, email}
+    return { id: responseQuery.rows[0].id, fullName, username, email }
 }
 
-async function v2Create({fullName, username, password, email, hashedPhotoName}) {
+async function v2Create({ fullName, username, password, email, hashedPhotoName }) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'INSERT INTO public.users ("fullName", username, password, email, profile_photo) VALUES ($1, $2, $3, $4, $5) RETURNING id', 
+        'INSERT INTO public.users ("fullName", username, password, email, profile_photo) VALUES ($1, $2, $3, $4, $5) RETURNING id',
         [fullName, username, password, email, hashedPhotoName])
     await disconnectDatabase(clientDatabase)
-    return {id:responseQuery.rows[0].id, fullName, username, email}
+    return { id: responseQuery.rows[0].id, fullName, username, email }
 }
 
-async function update({id, fullName, username, email, profile_photo}) {
+async function update({ id, fullName, username, email, profile_photo }) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
-        'UPDATE public.users SET "fullName"=$1, username=$2, email=$3, profile_photo=$4 WHERE id=$5 returning *', 
+        'UPDATE public.users SET "fullName"=$1, username=$2, email=$3, profile_photo=$4 WHERE id=$5 returning *',
         [fullName, username, email, profile_photo, id])
     await disconnectDatabase(clientDatabase)
     delete responseQuery.rows[0].password
     return responseQuery.rows[0]
 }
 
-async function remove({id}) {
+async function remove({ id }) {
     const clientDatabase = await createConnectionDatabase()
     const responseQuery = await clientDatabase.query(
         'DELETE FROM public.users WHERE id=$1', [id])
@@ -76,12 +76,28 @@ async function remove({id}) {
     return responseQuery
 }
 
-module.exports = {userExistbyUsernameOrEmail, 
-                findUserByUsername, 
-                findUserByEmail, 
-                findUserById, 
-                findAllUsers, 
-                create,
-                v2Create,
-                update, 
-                remove};
+async function updateProfilePhoto(photoUrl, userId) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query(
+        'UPDATE public.users SET profile_photo=$1 WHERE id=$2 returning id',
+        [photoUrl, userId])
+    await disconnectDatabase(clientDatabase)
+    delete responseQuery.rows[0].password
+    return {
+        id: responseQuery.rows[0].id,
+        profile_photo: photoUrl
+    }
+}
+
+module.exports = {
+    userExistbyUsernameOrEmail,
+    findUserByUsername,
+    findUserByEmail,
+    findUserById,
+    findAllUsers,
+    create,
+    v2Create,
+    update,
+    remove,
+    updateProfilePhoto
+};
