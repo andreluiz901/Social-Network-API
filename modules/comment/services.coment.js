@@ -42,6 +42,10 @@ async function getCommentsPaginatedById(page, limit, idPost) {
     return commentsRepository.getCommentsPageLimitById(offsetPage, limit, idPost)
 }
 
+async function getCommentsByIdPost(idPost) {
+    return commentsRepository.getCommentsByIdPost(idPost)
+}
+
 async function editAgendaComment(ownerIdComment, idComment, messageComment) {
     const dateNow = getNowDate()
 
@@ -55,4 +59,11 @@ async function editAgendaComment(ownerIdComment, idComment, messageComment) {
     }
 }
 
-module.exports = { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById, editAgendaComment }
+module.exports = {
+    createNewAgendaComment,
+    readAgendaComment,
+    deleteAgendaComment,
+    getCommentsPaginatedById,
+    editAgendaComment,
+    getCommentsByIdPost
+}

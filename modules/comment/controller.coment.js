@@ -1,7 +1,7 @@
 const express = require('express');
 const { authorization } = require('../auth/middleware.auth');
 const validateMessagePost = require('../agenda/middleware.agenda');
-const { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById, editAgendaComment } = require('./services.coment');
+const { createNewAgendaComment, readAgendaComment, deleteAgendaComment, getCommentsPaginatedById, editAgendaComment, getCommentsByIdPost } = require('./services.coment');
 const router = express.Router();
 
 
@@ -53,6 +53,20 @@ router.get('/post/:id?', authorization, async (req, res) => {
                 count: parseInt(responsePostPage.count)
             })
     } catch (error) {
+        res.status(500).json({ message: 'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error })
+    }
+})
+
+router.get('/v2_post/:id?', authorization, async (req, res) => {
+    try {
+        const idPost = req.params.id
+        const responsePostPage = await getCommentsByIdPost(idPost)
+        res.status(200).json(
+            {
+                data: responsePostPage.data
+            })
+    } catch (error) {
+        console.log(`error ao chamar a rota /v2_post/:id?:\n`, error)
         res.status(500).json({ message: 'ocorreu um erro no servidor, não foi possível obter a lista de postagens', error: error })
     }
 })
