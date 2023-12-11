@@ -33,10 +33,15 @@ router.delete('/:id?', authorization, async (req, res) => {
         const idUserLogado = req.userId
         const idComment = req.params.id
         const deleteComment = await deleteAgendaComment(idUserLogado, idComment)
-        res.status(200).json({ data: deleteComment, message: "Comentário excluído com sucesso" })
+
+        if (deleteComment) {
+            return res.status(200).json({ data: deleteComment, message: "Comentário excluído com sucesso" })
+        }
+
+        return res.status(200).json({ message: "Não foi possível deletar o comentário" })
     } catch (error) {
         console.log(error)
-        res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message })
     }
 })
 

@@ -32,9 +32,9 @@ async function deleteAgendaComment(ownerIdComment, idComment) {
     if (idOwnerCommentByCommentId && ownerIdComment === idOwnerCommentByCommentId.id_owner) {
         const isCommentDeleted = await commentsRepository.deleteComment(idComment)
         return isCommentDeleted.rows[0]
-    } else {
-        throw new Error("Não foi possível deletar o comentário")
     }
+    return false
+
 }
 
 async function getCommentsPaginatedById(page, limit, idPost) {

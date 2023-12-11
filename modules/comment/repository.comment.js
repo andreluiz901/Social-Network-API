@@ -94,7 +94,7 @@ async function getCommentsPageLimitById(offset, limit, idPost) {
 async function getCommentsByIdPost(idPost) {
     const clientDatabase = await createConnectionDatabase();
     const responseQuery = await clientDatabase.query(
-        'SELECT message, date_created, date_last_update, is_read, username, profile_photo FROM public.comments c join public.users u on c.id_owner = u.id WHERE id_post = $1 ORDER BY date_created DESC',
+        'SELECT c.id, message, date_created, date_last_update, is_read, username, profile_photo FROM public.comments c join public.users u on c.id_owner = u.id WHERE id_post = $1 ORDER BY date_created DESC',
         [idPost]
     )
     await disconnectDatabase(clientDatabase)
