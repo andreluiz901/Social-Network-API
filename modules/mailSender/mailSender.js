@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
 
 async function sendPasswordResetEmailTo(user, jwtToken) {
 
-    const html = await compilerHtml('./modules\\mailSender\\templates\\template.resetPass.html', {
+    const html = await compilerHtml('./modules/mailSender/templates/template.resetPass.html', {
         username: user.username,
         link: `https://${process.env.URL_FRONT}/password_reset/${jwtToken}`
     })
