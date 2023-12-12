@@ -4,13 +4,10 @@ const multer = require('../../config/multer')
 const { signUp,
     signIn,
     v2SignUp,
-    v2SignIn,
-    requestResetPassword } = require('./service.auth')
+    v2SignIn } = require('./service.auth')
 
 const { signInSchemaValidator,
     signUpSchemaValidator } = require('./middleware.auth');
-const sendPasswordResetEmailTo = require('../mailSender/mailSender');
-
 
 router.post('/signIn', signInSchemaValidator, async (req, res) => {
     try {
@@ -104,23 +101,5 @@ router.post('/v2/signUp', multer.single('profile_photo'), signUpSchemaValidator,
 
 });
 
-router.post('/request-reset-password', async (req, res) => {
 
-    const { email } = req.body
-
-    try {
-        const userToResetPassword = await requestResetPassword(email)
-
-        if (userToResetPassword) {
-            sendPasswordResetEmailTo(userToResetPassword.data, userToResetPassword.newJwtTokenToResetPass)
-            return res.status(200).json({ message: `An email was send to ${email} with instructions to reset password.` })
-        }
-        return res.status(401).json({ message: 'Email not found. Please check and try again.' })
-
-    } catch (error) {
-        console.log('error: ', error)
-        return res.status(500).json({ message: 'não foi possível solicitar o serviço no momento' })
-    }
-
-})
 module.exports = router;

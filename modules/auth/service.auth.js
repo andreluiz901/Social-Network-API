@@ -200,28 +200,12 @@ async function v2SignUp({ fullName, username, email, password, profile_photo }) 
     }
 }
 
-async function requestResetPassword(email) {
 
-    const existingUser = await getUserByEmail(email);
-
-    if (existingUser.count) {
-
-        const token = await jwt.sign(
-            { data: existingUser },
-            secret,
-            { expiresIn: 60 * 15 }
-        )
-
-        return { ...existingUser, newJwtTokenToResetPass: token }
-    }
-    return false
-}
 
 module.exports = {
     encryptPassword,
     signUp,
     signIn,
     v2SignUp,
-    v2SignIn,
-    requestResetPassword
+    v2SignIn
 }
