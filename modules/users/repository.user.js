@@ -21,7 +21,7 @@ async function findUserByEmail(email) {
     const responseQuery = await clientDatabase.query(
         'SELECT email FROM public.users WHERE email=$1', [email])
     await disconnectDatabase(clientDatabase)
-    return responseQuery.rows
+    return responseQuery.rows[0]
 }
 
 async function findUserById(id) {
@@ -89,6 +89,14 @@ async function updateProfilePhoto(photoUrl, userId) {
     }
 }
 
+async function getUserByEmail(email) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query(
+        'SELECT id, username, email FROM public.users WHERE email=$1 LIMIT 1', [email])
+    await disconnectDatabase(clientDatabase)
+    return { data: responseQuery.rows[0], count: responseQuery.rowCount }
+}
+
 module.exports = {
     userExistbyUsernameOrEmail,
     findUserByUsername,
@@ -99,5 +107,6 @@ module.exports = {
     v2Create,
     update,
     remove,
-    updateProfilePhoto
+    updateProfilePhoto,
+    getUserByEmail
 };

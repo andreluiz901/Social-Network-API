@@ -1,6 +1,6 @@
 const { createNewUser, v2CreateNewUser } = require('../users/service.user');
 const { encryptString, compareCryptString } = require('../../utils/cryptstring');
-const { userExistbyUsernameOrEmail, findUserByEmail, findUserByUsername, updateProfilePhoto } = require('../users/repository.user');
+const { userExistbyUsernameOrEmail, findUserByUsername, updateProfilePhoto, getUserByEmail } = require('../users/repository.user');
 const jwt = require('jsonwebtoken');
 const secret = require('../../config/token');
 const { s3 } = require('../../config/s3');
@@ -200,10 +200,28 @@ async function v2SignUp({ fullName, username, email, password, profile_photo }) 
     }
 }
 
+async function requestResetPassword(email) {
+
+    const existingUser = await getUserByEmail(email);
+
+    if (existingUser.count) {
+
+        const token = await jwt.sign(
+            { data: existingUser },
+            secret,
+            { expiresIn: 60 * 15 }
+        )
+
+        return { ...existingUser, newJwtTokenToResetPass: token }
+    }
+    return false
+}
+
 module.exports = {
     encryptPassword,
     signUp,
     signIn,
     v2SignUp,
-    v2SignIn
+    v2SignIn,
+    requestResetPassword
 }
