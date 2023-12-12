@@ -1,4 +1,5 @@
-const { getUserByEmail } = require("../users/repository.user");
+const { encryptPassword } = require("../auth/service.auth");
+const { getUserByEmail, updatePassword } = require("../users/repository.user");
 const jwt = require('jsonwebtoken')
 
 async function requestResetPassword(email) {
@@ -18,4 +19,10 @@ async function requestResetPassword(email) {
     return false
 }
 
-module.exports = requestResetPassword
+async function resetPassword(password, userId) {
+    const hashedPassword = encryptPassword(password)
+    const userPasswordUpdated = updatePassword(hashedPassword, userId)
+    return userPasswordUpdated
+}
+
+module.exports = { requestResetPassword, resetPassword }

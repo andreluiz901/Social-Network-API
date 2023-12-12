@@ -97,6 +97,15 @@ async function getUserByEmail(email) {
     return { data: responseQuery.rows[0], count: responseQuery.rowCount }
 }
 
+async function updatePassword(password, userId) {
+    const clientDatabase = await createConnectionDatabase()
+    const responseQuery = await clientDatabase.query(
+        'UPDATE public.users SET password = $1 WHERE id=$2 returning email',
+        [password, userId])
+    await disconnectDatabase(clientDatabase)
+    return responseQuery.rows[0].email
+}
+
 module.exports = {
     userExistbyUsernameOrEmail,
     findUserByUsername,
@@ -108,5 +117,6 @@ module.exports = {
     update,
     remove,
     updateProfilePhoto,
-    getUserByEmail
+    getUserByEmail,
+    updatePassword
 };
