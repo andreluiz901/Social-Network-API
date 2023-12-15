@@ -9,7 +9,8 @@ const resetPassController = require('./modules/resetPass/resetPass.controller')
 server.use(express.urlencoded({ extended: true }))
 server.use(express.json());
 const port = process.env.SERVER_PORT
-const cors = require('cors')
+const cors = require('cors');
+const { keepAlive } = require('./utils/mantainAlive');
 
 server.use(cors({
   "origin": "*",
@@ -27,6 +28,8 @@ server.use('/auth', loginController);
 server.use('/agenda', agendaController);
 server.use('/comment', commentController);
 server.use('/', resetPassController)
+
+//keepAlive()
 
 server.listen(port, () =>
   console.log('Server rodando na porta', port));

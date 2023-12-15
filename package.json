@@ -15,6 +15,7 @@
     "@aws-sdk/credential-provider-env": "^3.428.0",
     "@aws-sdk/property-provider": "^3.374.0",
     "aws-sdk": "^2.1473.0",
+    "axios": "^1.6.2",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
