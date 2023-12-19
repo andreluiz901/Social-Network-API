@@ -27,7 +27,7 @@ router.post('/request-reset-password', requestResetPassSchemaValidator, async (r
 
 router.post('/reset-password', resetPassSchemaValidator, async (req, res) => {
 
-    const { token, password, confirm_password } = req.body
+    const { token, password, _confirm_password } = req.body
 
     try {
 
