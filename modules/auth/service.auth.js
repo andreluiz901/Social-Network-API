@@ -7,6 +7,7 @@ const { s3 } = require('../../config/s3');
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const v2 = require('../../config/cloudinary');
 let streamifier = require('streamifier');
+const { mailSenderService } = require('../mailSender/mailSender');
 
 function encryptPassword(password) {
     return encryptString(password)
@@ -184,7 +185,7 @@ async function v2SignUp({ fullName, username, email, password, profile_photo }) 
         const userCreated = await v2CreateNewUser({ fullName, username, email, password: hashedPassword, hashedPhotoName });
         const arquivo = await v3UploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
         const profilePhotoUpdated = await updateProfilePhoto(arquivo.secure_url, userCreated.id)
-
+        mailSenderServiceervice(username, email, 'template.signUpWelcome')
         return {
             ...userCreated,
             profile_photo: profilePhotoUpdated.profile_photo
@@ -193,6 +194,8 @@ async function v2SignUp({ fullName, username, email, password, profile_photo }) 
 
     const hashedPhotoName = null;
     const userCreated = await v2CreateNewUser({ fullName, username, email, password: hashedPassword, hashedPhotoName });
+
+    mailSenderService(username, email, 'template.signUpWelcome')
 
     return {
         ...userCreated,

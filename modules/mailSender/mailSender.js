@@ -44,4 +44,19 @@ async function sendPasswordResetEmailTo(user, jwtToken) {
     })
 }
 
-module.exports = sendPasswordResetEmailTo
+
+async function mailSenderService(username, email, template) {
+    const html = await compilerHtml(`./modules/mailSender/templates/${template}`, {
+        username,
+        link: `https://${process.env.URL_FRONT}`
+    })
+
+    return transporter.sendMail({
+        from: `${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
+        to: `${username} <${email}>`,
+        subject: `Welcome - My App Social`,
+        html
+    })
+}
+
+module.exports = { sendPasswordResetEmailTo, mailSenderService }

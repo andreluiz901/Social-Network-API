@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken')
-const sendPasswordResetEmailTo = require('../mailSender/mailSender');
+const { sendPasswordResetEmailTo } = require('../mailSender/mailSender');
 const { requestResetPassword, resetPassword } = require('./resetPass.service');
 const { resetPassSchemaValidator, requestResetPassSchemaValidator } = require('./resetPass.middleware');
 const router = express.Router();
