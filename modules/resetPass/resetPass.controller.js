@@ -14,9 +14,10 @@ router.post('/request-reset-password', requestResetPassSchemaValidator, async (r
         const userToResetPassword = await requestResetPassword(email)
 
         if (userToResetPassword) {
-            sendPasswordResetEmailTo(userToResetPassword.data, userToResetPassword.newJwtTokenToResetPass)
+            await sendPasswordResetEmailTo(userToResetPassword.data, userToResetPassword.newJwtTokenToResetPass)
             return res.status(200).json({ message: `An email was send to ${email} with instructions to reset password.` })
         }
+
         return res.status(401).json({ message: 'Email not found. Please check and try again.' })
 
     } catch (error) {
