@@ -30,7 +30,7 @@ async function sendPasswordResetEmailTo(user, jwtToken) {
 async function mailSenderService(username, email, template) {
     const html = await compilerHtml(`./modules/mailSender/templates/${template}`, {
         username,
-        link: `https://${process.env.URL_FRONT}`
+        link: `${process.env.URL_FRONT}`
     })
 
     return transporter.sendMail({
