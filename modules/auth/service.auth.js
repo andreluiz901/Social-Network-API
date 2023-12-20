@@ -185,7 +185,7 @@ async function v2SignUp({ fullName, username, email, password, profile_photo }) 
         const userCreated = await v2CreateNewUser({ fullName, username, email, password: hashedPassword, hashedPhotoName });
         const arquivo = await v3UploadProfilePhotoUser(userCreated.id, hashedPhotoName, profile_photo.buffer, profile_photo.mimetype)
         const profilePhotoUpdated = await updateProfilePhoto(arquivo.secure_url, userCreated.id)
-        mailSenderServiceervice(username, email, 'template.signUpWelcome')
+        mailSenderService(username, email, 'template.signUpWelcome.html')
         return {
             ...userCreated,
             profile_photo: profilePhotoUpdated.profile_photo
